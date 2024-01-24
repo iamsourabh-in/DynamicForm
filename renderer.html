@@ -1,0 +1,113 @@
+<!-- form-renderer.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Renderer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #jsonInputPanel {
+      background-color: #f2f2f2;
+      padding: 20px;
+      width: 200px;
+    }
+
+    #formRenderer {
+      max-width: 600px;
+      margin: 20px;
+      border: 2px dashed #ccc;
+      padding: 10px;
+      flex-grow: 1;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="jsonInputPanel">
+    <p>Paste JSON:</p>
+    <textarea id="jsonInput" rows="10" cols="30"></textarea>
+    <button onclick="renderForm()">Render Form</button>
+  </div>
+
+  <form id="formRenderer">
+    <!-- Form elements will be dynamically added here -->
+  </form>
+
+  <script>
+    function renderForm() {
+      const jsonInput = document.getElementById('jsonInput').value;
+      const formSpec = JSON.parse(jsonInput);
+      const formElement = document.getElementById('formRenderer');
+      formElement.innerHTML = '';
+
+      formSpec.forEach(control => {
+        const { type, label, placeholder, options, required, disabled, validation, cssClass, columnLayout } = control;
+        const inputElement = document.createElement(type === 'textarea' ? 'textarea' : 'input');
+        inputElement.type = type;
+        inputElement.placeholder = placeholder;
+        inputElement.required = required;
+        inputElement.disabled = disabled;
+
+        if (type === 'select' && options) {
+          options.forEach(option => {
+            const optionElement = document.createElement('option');
+            optionElement.value = option;
+            optionElement.text = option;
+            inputElement.appendChild(optionElement);
+          });
+        }
+
+        const labelElement = document.createElement('label');
+        labelElement.textContent = label;
+
+        const controlWrapper = document.createElement('div');
+        controlWrapper.className = `form-control ${cssClass || ''} ${columnLayout ? 'column-layout' : ''}`;
+
+        if (validation) {
+          inputElement.addEventListener('input', validateInput);
+        }
+
+        controlWrapper.appendChild(labelElement);
+        controlWrapper.appendChild(inputElement);
+
+        formElement.appendChild(controlWrapper);
+      });
+    }
+
+    function validateInput(event) {
+      const input = event.target;
+      // Basic email validation
+      if (input.type === 'email' && !input.value.includes('@')) {
+        input.setCustomValidity('Invalid email address');
+      } else {
+        input.setCustomValidity('');
+      }
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,49 @@
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: space-between;
+    padding: 20px;
+}
+
+.toolbox {
+    width: 200px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+
+.toolbox-item {
+    margin-bottom: 8px;
+    cursor: move;
+}
+
+.designer {
+    flex: 1;
+    border: 1px solid #ddd;
+    padding: 10px;
+    position: relative;
+}
+
+.form-control {
+    position: absolute;
+}
+
+.json-schema {
+    width: 200px;
+    border: 1px solid #ddd;
+    padding: 10px;
+}
+.container {
+    margin-top: 20px;
+}
+
+.designer {
+    min-height: 300px; /* Adjust as needed */
+}
+
+.properties {
+    margin-top: 20px;
+}

@@ -1,0 +1,79 @@
+<!-- form-builder.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Form Builder</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      display: flex;
+      height: 100vh;
+      margin: 0;
+    }
+
+    #sidePanel {
+      background-color: #f2f2f2;
+      padding: 20px;
+      width: 200px;
+    }
+
+    #dynamicForm {
+      max-width: 600px;
+      margin: 20px;
+      border: 2px dashed #ccc;
+      padding: 10px;
+      flex-grow: 1;
+      display: flex;
+      flex-wrap: wrap;
+    }
+
+    #jsonPanel {
+      background-color: #f2f2f2;
+      padding: 20px;
+      width: 200px;
+      white-space: pre-wrap;
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 8px;
+      margin-bottom: 10px;
+      box-sizing: border-box;
+    }
+
+    button {
+      background-color: #4CAF50;
+      color: white;
+      padding: 10px 15px;
+      border: none;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="sidePanel" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <p>Controls Panel</p>
+    <div draggable="true" ondragstart="drag(event)" data-control-type="text">Text Input</div>
+    <div draggable="true" ondragstart="drag(event)" data-control-type="email">Email Input</div>
+    <div draggable="true" ondragstart="drag(event)" data-control-type="select">Select Dropdown</div>
+    <div draggable="true" ondragstart="drag(event)" data-control-type="textarea">Textarea</div>
+    <!-- Add other controls such as date picker, autocomplete, etc. -->
+  </div>
+
+  <form id="dynamicForm" ondrop="drop(event)" ondragover="allowDrop(event)">
+    <!-- Form elements will be dynamically added here -->
+  </form>
+
+  <div id="jsonPanel"></div>
+
+  <button onclick="saveForm()">Save Form</button>
+
+  <script>
+    // ... (Same JavaScript code as in the previous example)
+  </script>
+</body>
+</html>

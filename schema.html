@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Form Renderer</title>
+  <!-- Add your preferred styling here, or link to a CSS file -->
+  <style>
+    /* Add your styles for form elements, layout, etc. */
+    .form-container {
+      max-width: 600px;
+      margin: auto;
+    }
+
+    .form-group {
+      margin-bottom: 20px;
+    }
+
+    /* Additional styling based on your preferences */
+  </style>
+</head>
+<body>
+  <div class="form-container" id="app">
+    <!-- Dynamic form will be rendered here -->
+  </div>
+
+  <script>
+    // Define the schema
+    const schema = {
+      text: {
+        type: 'text',
+        label: 'Text',
+      },
+      text_1: {
+        type: 'text',
+        label: 'Teasdasd',
+      },
+      number: {
+        type: 'text',
+        rules: ['nullable', 'numeric'],
+        autocomplete: 'off',
+        label: 'Number',
+        inputType: 'date',
+      },
+      phone: {
+        type: 'text',
+        inputType: 'tel',
+        label: 'Phone',
+        rules: [
+          {
+            required: [
+              ['text', 'not_empty'],
+              ['checkbox', '==', true],
+            ],
+          },
+        ],
+      },
+      checkbox: {
+        type: 'checkbox',
+        text: 'Checkbox',
+      },
+      submit: {
+        type: 'button',
+        buttonLabel: 'Save',
+        conditions: [
+          ['text', 'not_empty'],
+          ['phone', '^', '1'],
+        ],
+        target: '_top',
+        between: 'asd',
+        after: 'asd',
+        before: 'asd',
+        columns: {
+          container: 3,
+        },
+      }
+    };
+
+    // Render the form based on the schema
+    Object.keys(schema).forEach(field => {
+      const fieldConfig = schema[field];
+
+      // Create a form group
+      const formGroup = document.createElement('div');
+      formGroup.classList.add('form-group');
+
+      // Render form elements based on their types
+      switch (fieldConfig.type) {
+        case 'text':
+          formGroup.innerHTML = `
+            <label>${fieldConfig.label}</label>
+            <input type="text" id="${field}" />
+          `;
+          break;
+        case 'checkbox':
+          formGroup.innerHTML = `
+            <input type="checkbox" id="${field}" />
+            <label>${fieldConfig.text}</label>
+          `;
+          break;
+        // Add other cases for different form element types
+
+        default:
+          // Handle unsupported types or add more cases
+      }
+
+      // Append the form group to the container
+      document.getElementById('app').appendChild(formGroup);
+    });
+
+    // Render the submit button separately
+    const submitButton = document.createElement('button');
+    submitButton.type = 'button';
+    submitButton.innerText = schema.submit.buttonLabel;
+    submitButton.addEventListener('click', onSubmit);
+    document.getElementById('app').appendChild(submitButton);
+
+    // Handle form submission logic
+    function onSubmit() {
+      // Get form data and perform validation based on conditions
+      const formData = {};
+
+      Object.keys(schema).forEach(field => {
+        const fieldConfig = schema[field];
+        const inputElement = document.getElementById(field);
+
+        if (inputElement) {
+          formData[field] = fieldConfig.type === 'checkbox' ? inputElement.checked : inputElement.value;
+        }
+      });
+
+      // Perform validation based on conditions
+      const isValid = schema.submit.conditions.every(condition => {
+        const [fieldName, operator, value] = condition;
+
+        switch (operator) {
+          case '==':
+            return formData[fieldName] == value; // Loose equality for simplicity
+          case '^':
+            return formData[fieldName].startsWith(value);
+          // Add more cases for other operators as needed
+
+          default:
+            return true; // Default to true for unsupported operators
+        }
+      });
+
+      if (isValid) {
+        // Perform additional actions if the form is valid
+        console.log('Form submitted:', formData);
+      } else {
+        // Handle invalid form submission
+        console.error('Form submission failed. Check conditions.');
+      }
+    }
+  </script>
+</body>
+</html>
