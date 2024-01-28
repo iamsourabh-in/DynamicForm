@@ -1,8 +1,6 @@
-//The Script is prepared for the following:
-// Show the controls in the toolbox
-// Render the controls in the designer
-// Add the controls to the JSON schema
-const formSpec= [];
+// # #######################################   Left Toolbox
+
+const formSpec = [];
 let jsonSchema = [];
 let selectedControl = null;
 
@@ -20,7 +18,8 @@ const controls = [
     { key: 'Label', icon: 'bi-bookmark', description: 'Label' },
     { key: 'Button', icon: 'button-icon', description: 'Button' },
     { key: 'Column', icon: 'bi-microsoft', description: 'Column' },
-    { key: 'Row', icon: 'bi-menu-button-wide', description: 'Row' }
+    { key: 'Row', icon: 'bi-menu-button-wide', description: 'Row' },
+    { key: 'Iframe', icon: 'bi-bounding-box', description: 'Row' }
 ];
 
 function renderToolbox() {
@@ -60,7 +59,7 @@ function createToolboxItem(control) {
     icon.classList.add('bi', control.icon);
     icon_div.appendChild(icon);
     rootElement.appendChild(icon_div);
-    
+
     const text_div = document.createElement('div');
     text_div.classList.add('text_div');
 
@@ -75,21 +74,126 @@ function createToolboxItem(control) {
     desc.innerText = control.description;
     text_div.appendChild(desc);
     rootElement.appendChild(text_div);
-    
+
     rootElement.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', control.key);
     });
 
     return rootElement;
 }
-
+// # #######################################  Left Toolbox
 
 function handleDrop(e) {
     e.preventDefault();
+    var highlightedDropArea = e.target;
+    highlightedDropArea.classList.remove('highlight-dragover');
     const elementType = e.dataTransfer.getData('text/plain');
-    createControlInDesigner(elementType, e);
+
+    jsonSchema.push({
+        type: elementType,
+        id: Date.now().toString(),
+        name: elementType,
+        label: elementType,
+        placeholder: elementType,
+        required: false,
+        min: '',
+        max: '',
+        step: '',
+        value: '',
+        defaultValue: '',
+        options: [],
+        multiple: false,
+        accept: ''
+    });
+    
+    if (elementType === 'Row' || elementType === 'Column') {
+        // Create a div element for the row or column
+        const div = document.createElement('div');
+
+        div.classList.add("row", "show-hover");// Adjust the height as needed
+
+        const controlElement = document.createElement('div');
+        controlElement.style.margin = '2px';
+        controlElement.classList.add(elementType.toLowerCase(), "col-md-6");
+        controlElement.style.border = '2px solid #000'; // 1px border
+        controlElement.style.minHeight = '50px'; // Adjust the height as needed
+
+        const controlElement1 = document.createElement('div');
+
+        controlElement1.classList.add(elementType.toLowerCase(), "col-md-6");
+        controlElement1.style.border = '2px solid #000'; // 1px border
+        controlElement1.style.minHeight = '50px'; // Adjust the height as needed
+
+        const controlElement2 = document.createElement('div');
+
+        controlElement2.classList.add(elementType.toLowerCase(), "col-md-12");
+        controlElement2.style.border = '2px solid #000'; // 1px border
+        controlElement2.style.minHeight = '50px'; // Adjust the height as needed
+
+        // Make the row or column resizable
+        //resizableControl(controlElement);
+
+        // Make the control draggable within the designer
+        //controlElement.draggable = true;
+
+        controlElement.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                type: elementType,
+                id: Date.now().toString()
+            }));
+        });
+        controlElement.addEventListener('drop', handleDropInGrid);
+
+        div.appendChild(controlElement);
+        div.appendChild(controlElement1);
+        div.appendChild(controlElement2);
+        designer.append(div);
+
+    }
+    else {
+        //RefreshDesigner();
+        createControlInDesigner(elementType, e);
+    }
 }
 
+function highlightDropArea(event) {
+    console.log(event);
+    var highlightedDropArea = event.target;
+    highlightedDropArea.classList.add('highlight-dragover');
+    // Check if the dragged item is a control
+}
+
+function removeHighlight(event) {
+    console.log(event);
+    var highlightedDropArea = event.target;
+    highlightedDropArea.classList.remove('highlight-dragover');
+    // Check if the dragged item is a control
+}
+
+
+/**
+ * Refreshes the designer UI by re-rendering the JSON schema.
+ */
+function RefreshDesigner() {
+
+    const designer = document.getElementById('designer');
+    designer.innerHTML = '';
+
+    const form = document.createElement('form');
+    form.id = 'form';
+    form.onsubmit = (e) => {
+        e.preventDefault();
+        console.log(jsonSchema);
+    };
+
+    jsonSchema.forEach(element => {
+        const elementType = element.type;
+        const controlElement = createControlInDesigner(element);
+        form.appendChild(controlElement);
+    });
+
+    designer.appendChild(form);
+}
 
 function handleDropInGrid(e) {
     e.preventDefault();
@@ -169,84 +273,29 @@ function createControlInsideElement(elementType, e) {
 }
 
 
-function hideProperties() {
-    const properties = document.getElementById('properties');
-    properties.innerHTML = '';
-    selectedControl = null;
-}
+
 
 function createControlInDesigner(elementType, e) {
     const designer = document.getElementById('designer');
     const controlElement = createControlElement(elementType);
-    if (elementType.startsWith('Form')) {
-    }
-    else
-        if (elementType === 'Row' || elementType === 'Column') {
-            // Create a div element for the row or column
-            const div = document.createElement('div');
 
-            div.classList.add("row", "show-hover");// Adjust the height as needed
+    controlElement.addEventListener('click', () => {
+        selectedControl = controlElement;
+        showControlProperties(elementType);
+    });
 
+    // Make the control draggable within the designer
+    //controlElement.draggable = true;
 
+    controlElement.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', JSON.stringify({
+            type: elementType,
+            id: Date.now().toString()
+        }));
+    });
 
-            const controlElement = document.createElement('div');
+    designer.appendChild(controlElement);
 
-            controlElement.classList.add(elementType.toLowerCase(), "col-md-6");
-            controlElement.style.border = '5px solid #000'; // 1px border
-            controlElement.style.minHeight = '50px'; // Adjust the height as needed
-
-            const controlElement1 = document.createElement('div');
-
-            controlElement1.classList.add(elementType.toLowerCase(), "col-md-6");
-            controlElement1.style.border = '5px solid #000'; // 1px border
-            controlElement1.style.minHeight = '50px'; // Adjust the height as needed
-
-            const controlElement2 = document.createElement('div');
-
-            controlElement2.classList.add(elementType.toLowerCase(), "col-md-12");
-            controlElement2.style.border = '5px solid #000'; // 1px border
-            controlElement2.style.minHeight = '50px'; // Adjust the height as needed
-
-            // Make the row or column resizable
-            //resizableControl(controlElement);
-
-            // Make the control draggable within the designer
-            //controlElement.draggable = true;
-
-            controlElement.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text/plain', JSON.stringify({
-                    type: elementType,
-                    id: Date.now().toString()
-                }));
-            });
-            controlElement.addEventListener('drop', handleDropInGrid);
-
-            div.appendChild(controlElement);
-            div.appendChild(controlElement1);
-            div.appendChild(controlElement2);
-            designer.append(div);
-
-        }
-        else {
-            controlElement.addEventListener('click', () => {
-                selectedControl = controlElement;
-                showControlProperties(elementType);
-            });
-
-            // Make the control draggable within the designer
-            //controlElement.draggable = true;
-
-            controlElement.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData('text/plain', JSON.stringify({
-                    type: elementType,
-                    id: Date.now().toString()
-                }));
-            });
-
-            designer.appendChild(controlElement);
-
-
-        }
     // Update the JSON Schema with the new control
     jsonSchema.push({
         type: elementType,
@@ -268,28 +317,22 @@ function createControlInDesigner(elementType, e) {
     renderJsonSchema();
 }
 
-// Resizable function using resizable library
-function resizableControl(element) {
-    Resizable.create(element, {
-        // Options for resizable behavior
-        // You can customize the resizing behavior here
-        // See the documentation: https://github.com/nielsboogaard/resizable#options
-        handleSelector: '.resizable-handle',
-        onResize: () => {
-            // Handle resize events if needed
-        }
-    });
-}
 
 function createControlElement(elementType) {
+    // Create form group
     const controlElement = document.createElement('div');
-    controlElement.classList.add('form-control', 'show-hover');
+    controlElement.classList.add('form-group', 'show-hover');
     controlElement.dataset.type = elementType;
     controlElement.style.width = '100%';
+    
+    // Create Label
+    let labelElement = document.createElement('label');;
+    labelElement.innerHTML = elementType;
+    controlElement.appendChild(labelElement);
+
+    // Create Actual ontrol
     const inputElement = createInputElement(elementType);
-
     controlElement.appendChild(inputElement);
-
     return controlElement;
 }
 
@@ -299,57 +342,68 @@ function createInputElement(elementType) {
     switch (elementType) {
         case 'Textbox':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'text';
             break;
         case 'Number':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'number';
             break;
         case 'URL':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'url';
             break;
         case 'Email':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'email';
             break;
         case 'Dropdown':
             inputElement = document.createElement('select');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.appendChild(createOption('Option 1'));
             break;
         case 'Checkbox':
         case 'Radio':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = elementType.toLowerCase();
             break;
         case 'Date Picker':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'date';
             break;
         case 'Slider':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'range';
             break;
         case 'File Upload':
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'file';
             break;
         case 'Label':
             inputElement = document.createElement('label');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.innerText = 'Label';
             break;
         case 'Button':
             inputElement = document.createElement('button');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.innerText = 'Button';
             break;
@@ -360,6 +414,7 @@ function createInputElement(elementType) {
             break;
         default:
             inputElement = document.createElement('input');
+            inputElement.classList.add('form-control');
             inputElement.id = Date.now().toString();
             inputElement.type = 'text';
     }
@@ -373,6 +428,38 @@ function createOption(value) {
     option.text = value;
     return option;
 }
+
+
+
+function renderJsonSchema() {
+    const jsonSchemaDisplay = document.getElementById('json-schema');
+    jsonSchemaDisplay.innerHTML = JSON.stringify(jsonSchema, null, 2);
+}
+
+function renderDesigner() {
+    const designer = document.getElementById('designer');
+    designer.innerHTML = '';
+
+    // Set the designer container to flex with column layout
+    designer.style.display = 'flex';
+    designer.style.flexDirection = 'column';
+
+    designer.addEventListener('dragover', handleDragOver);
+    designer.addEventListener('drop', handleDrop);
+}
+
+function handleDragOver(e) {
+    e.preventDefault(); // Prevent default behavior to enable drop
+}
+
+function init() {
+    renderToolbox();
+    renderDesigner();
+    renderJsonSchema();
+}
+
+init();
+// ############# PROPERTY WINDOW
 
 function showControlProperties(elementType) {
     const properties = document.getElementById('properties');
@@ -441,24 +528,11 @@ function updateControlProperties() {
     hideProperties();
 }
 
-function renderJsonSchema() {
-    const jsonSchemaDisplay = document.getElementById('json-schema');
-    jsonSchemaDisplay.innerHTML = JSON.stringify(jsonSchema, null, 2);
+function hideProperties() {
+    const properties = document.getElementById('properties');
+    properties.innerHTML = '';
+    selectedControl = null;
 }
-
-function renderDesigner() {
-    const designer = document.getElementById('designer');
-    designer.innerHTML = '';
-
-    // Set the designer container to flex with column layout
-    designer.style.display = 'flex';
-    designer.style.flexDirection = 'column';
-
-    designer.addEventListener('dragover', handleDragOver);
-    designer.addEventListener('drop', handleDrop);
-}
-
-
 
 function removeControl() {
     if (!selectedControl) return;
@@ -476,15 +550,3 @@ function removeControl() {
     // Clear the properties section
     hideProperties();
 }
-
-function handleDragOver(e) {
-    e.preventDefault(); // Prevent default behavior to enable drop
-}
-
-function init() {
-    renderToolbox();
-    renderDesigner();
-    renderJsonSchema();
-}
-
-init();

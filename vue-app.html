@@ -1,7 +1,7 @@
-<div id="app">
+<div class="container-fluid" id="app">
   <form v-on:submit.prevent="addItem">
     <p>Add item</p>
-    <p>Item name: <input type="text" required v-model="itemName"></p>
+    <p>Item name: <input class="form-control" type="text" required v-model="itemName"></p>
     <p>How many: <input type="number" v-model="itemNumber"></p>
     <button type="submit">Add item</button>
   </form>
