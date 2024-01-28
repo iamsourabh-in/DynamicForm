@@ -2,7 +2,6 @@
 
 const formSpec = [];
 let jsonSchema = [];
-let uiSchema = [];
 let selectedControl = null;
 
 const controls = [
