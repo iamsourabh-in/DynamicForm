@@ -49,5 +49,5 @@ body {
 }
 
 .show-hover :hover{
-    border: 5px solid green;
+    border: 2px solid rgb(42, 212, 42);
 }
