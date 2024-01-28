@@ -93,7 +93,8 @@ function handleDrop(e) {
         value: '',
         options: [],
         multiple: false,
-        accept: ''
+        accept: '',
+        class: ''
     });
 
 
@@ -132,7 +133,7 @@ class FormBuilder {
         this.form = document.createElement('form');
         this.container.appendChild(this.form);
 
-        this.schema.forEach(field => {
+        schema.forEach(field => {
             const element = this.createField(field);
             this.form.appendChild(element);
         });
@@ -522,9 +523,29 @@ function updateControlProperties() {
     selectedControl.name = name;
     selectedControl.id = id;
     selectedControl.children[1].value = value;
-    selectedControl.classList.add(cssClass);
-
+    selectedControl.children[1].classList.add(cssClass);
+    const index = schema.findIndex(obj => obj.id === id);
+    schema = updateSchemaInfo(schema, id, {
+        name: name,
+        id: id,
+        value: value,
+        class: cssClass
+    });
     hideProperties();
+}
+
+function updateSchemaInfo(schema, id, update) {
+
+    // Find index of object with given id
+    const index = schema.findIndex(obj => obj.id === id);
+
+    // If object exists, update it
+    if (index !== -1) {
+        schema[index] = { ...schema[index], ...update };
+    }
+
+    return schema;
+
 }
 
 function hideProperties() {
