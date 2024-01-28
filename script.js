@@ -2,27 +2,26 @@
 // Show the controls in the toolbox
 // Render the controls in the designer
 // Add the controls to the JSON schema
-
-const controls = [
-    { key: 'Textbox', icon: 'textbox-icon', description: 'Text Input' },
-    { key: 'Dropdown', icon: 'dropdown-icon', description: 'Dropdown Selection' },
-    { key: 'Number', icon: 'number-input-icon', description: 'Numeric Input' },
-    { key: 'URL', icon: 'url-icon', description: 'URL Input' },
-    { key: 'Email', icon: 'email-icon', description: 'Email Input' },
-    { key: 'Checkbox', icon: 'checkbox-icon', description: 'Checkbox' },
-    { key: 'Radio', icon: 'radio-icon', description: 'Radio Button' },
-    { key: 'Date Picker', icon: 'date-picker-icon', description: 'Date Picker' },
-    { key: 'Slider', icon: 'slider-icon', description: 'Slider Input' },
-    { key: 'File Upload', icon: 'file-upload-icon', description: 'File Upload' },
-    { key: 'Label', icon: 'label-icon', description: 'Label' },
-    { key: 'Button', icon: 'button-icon', description: 'Button' },
-    { key: 'Column', icon: 'column-icon', description: 'Column' },
-    { key: 'Row', icon: 'row-icon', description: 'Row' }
-];
-
+const formSpec= [];
 let jsonSchema = [];
 let selectedControl = null;
 
+const controls = [
+    { key: 'Textbox', icon: 'bi-fonts', description: 'Text Input' },
+    { key: 'Dropdown', icon: 'bi-arrow-down-square-fill', description: 'Dropdown Selection' },
+    { key: 'Number', icon: 'bi-1-square', description: 'Numeric Input' },
+    { key: 'URL', icon: 'bi-link-45deg', description: 'URL Input' },
+    { key: 'Email', icon: 'bi-mailbox', description: 'Email Input' },
+    { key: 'Checkbox', icon: 'bi-card-checklist', description: 'Checkbox' },
+    { key: 'Radio', icon: 'bi-0-circle', description: 'Radio Button' },
+    { key: 'Date Picker', icon: 'bi-calendar-date', description: 'Date Picker' },
+    { key: 'Slider', icon: 'bi-sliders', description: 'Slider Input' },
+    { key: 'File Upload', icon: 'bi-file-earmark-arrow-up', description: 'File Upload' },
+    { key: 'Label', icon: 'bi-bookmark', description: 'Label' },
+    { key: 'Button', icon: 'button-icon', description: 'Button' },
+    { key: 'Column', icon: 'bi-microsoft', description: 'Column' },
+    { key: 'Row', icon: 'bi-menu-button-wide', description: 'Row' }
+];
 
 function renderToolbox() {
     const controlsTab = document.getElementById('controls');
@@ -36,10 +35,10 @@ function renderToolbox() {
     controls.forEach(control => {
         const controlElement = createToolboxItem(control);
 
-        if (control.startsWith('Form') || control.startsWith('FTForm')) {
+        if (control.key.startsWith('Form') || control.key.startsWith('FTForm')) {
             // Add to the "Form" tab
             formTab.appendChild(controlElement);
-        } else if (control === 'Column' || control === 'Row') {
+        } else if (control.key === 'Column' || control.key === 'Row') {
             // Add to the "Layout" tab
             layoutTab.appendChild(controlElement);
         } else {
@@ -50,17 +49,38 @@ function renderToolbox() {
 }
 
 function createToolboxItem(control) {
-    const controlElement = document.createElement('div');
-    controlElement.classList.add('toolbox-item');
-    controlElement.draggable = true;
-    controlElement.dataset.type = control.key;
-    controlElement.innerText = control.key;
+    const rootElement = document.createElement('div');
+    rootElement.draggable = true;
+    rootElement.classList.add('widgets_div');
+    rootElement.dataset.type = control.key;
 
-    controlElement.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', controlType);
+    const icon_div = document.createElement('div');
+    icon_div.classList.add('icon_div');
+    const icon = document.createElement('i');
+    icon.classList.add('bi', control.icon);
+    icon_div.appendChild(icon);
+    rootElement.appendChild(icon_div);
+    
+    const text_div = document.createElement('div');
+    text_div.classList.add('text_div');
+
+    const tool = document.createElement('span');
+    tool.innerText = control.key;
+    text_div.appendChild(tool);
+
+    const br = document.createElement('br');
+    text_div.appendChild(br);
+
+    const desc = document.createElement('span');
+    desc.innerText = control.description;
+    text_div.appendChild(desc);
+    rootElement.appendChild(text_div);
+    
+    rootElement.addEventListener('dragstart', (e) => {
+        e.dataTransfer.setData('text/plain', control.key);
     });
 
-    return controlElement;
+    return rootElement;
 }
 
 
@@ -161,72 +181,72 @@ function createControlInDesigner(elementType, e) {
     if (elementType.startsWith('Form')) {
     }
     else
-    if (elementType === 'Row' || elementType === 'Column') {
-        // Create a div element for the row or column
-        const div = document.createElement('div');
+        if (elementType === 'Row' || elementType === 'Column') {
+            // Create a div element for the row or column
+            const div = document.createElement('div');
 
-        div.classList.add("row", "show-hover");// Adjust the height as needed
-
-
-
-        const controlElement = document.createElement('div');
-
-        controlElement.classList.add(elementType.toLowerCase(),"col-md-6");
-        controlElement.style.border = '5px solid #000'; // 1px border
-        controlElement.style.minHeight = '50px'; // Adjust the height as needed
-
-        const controlElement1 = document.createElement('div');
-        
-        controlElement1.classList.add(elementType.toLowerCase(),"col-md-6");
-        controlElement1.style.border = '5px solid #000'; // 1px border
-        controlElement1.style.minHeight = '50px'; // Adjust the height as needed
-
-        const controlElement2 = document.createElement('div');
-        
-        controlElement2.classList.add(elementType.toLowerCase(),"col-md-12");
-        controlElement2.style.border = '5px solid #000'; // 1px border
-        controlElement2.style.minHeight = '50px'; // Adjust the height as needed
-
-        // Make the row or column resizable
-        //resizableControl(controlElement);
-
-        // Make the control draggable within the designer
-        //controlElement.draggable = true;
-
-        controlElement.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                type: elementType,
-                id: Date.now().toString()
-            }));
-        });
-        controlElement.addEventListener('drop', handleDropInGrid);
-
-        div.appendChild(controlElement);
-        div.appendChild(controlElement1);
-        div.appendChild(controlElement2);
-        designer.append(div);
-
-    }
-    else {
-        controlElement.addEventListener('click', () => {
-            selectedControl = controlElement;
-            showControlProperties(elementType);
-        });
-
-        // Make the control draggable within the designer
-        //controlElement.draggable = true;
-
-        controlElement.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                type: elementType,
-                id: Date.now().toString()
-            }));
-        });
-
-        designer.appendChild(controlElement);
+            div.classList.add("row", "show-hover");// Adjust the height as needed
 
 
-    }
+
+            const controlElement = document.createElement('div');
+
+            controlElement.classList.add(elementType.toLowerCase(), "col-md-6");
+            controlElement.style.border = '5px solid #000'; // 1px border
+            controlElement.style.minHeight = '50px'; // Adjust the height as needed
+
+            const controlElement1 = document.createElement('div');
+
+            controlElement1.classList.add(elementType.toLowerCase(), "col-md-6");
+            controlElement1.style.border = '5px solid #000'; // 1px border
+            controlElement1.style.minHeight = '50px'; // Adjust the height as needed
+
+            const controlElement2 = document.createElement('div');
+
+            controlElement2.classList.add(elementType.toLowerCase(), "col-md-12");
+            controlElement2.style.border = '5px solid #000'; // 1px border
+            controlElement2.style.minHeight = '50px'; // Adjust the height as needed
+
+            // Make the row or column resizable
+            //resizableControl(controlElement);
+
+            // Make the control draggable within the designer
+            //controlElement.draggable = true;
+
+            controlElement.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    type: elementType,
+                    id: Date.now().toString()
+                }));
+            });
+            controlElement.addEventListener('drop', handleDropInGrid);
+
+            div.appendChild(controlElement);
+            div.appendChild(controlElement1);
+            div.appendChild(controlElement2);
+            designer.append(div);
+
+        }
+        else {
+            controlElement.addEventListener('click', () => {
+                selectedControl = controlElement;
+                showControlProperties(elementType);
+            });
+
+            // Make the control draggable within the designer
+            //controlElement.draggable = true;
+
+            controlElement.addEventListener('dragstart', (e) => {
+                e.dataTransfer.setData('text/plain', JSON.stringify({
+                    type: elementType,
+                    id: Date.now().toString()
+                }));
+            });
+
+            designer.appendChild(controlElement);
+
+
+        }
     // Update the JSON Schema with the new control
     jsonSchema.push({
         type: elementType,
@@ -282,7 +302,7 @@ function createInputElement(elementType) {
             inputElement.id = Date.now().toString();
             inputElement.type = 'text';
             break;
-        case 'Number Input':
+        case 'Number':
             inputElement = document.createElement('input');
             inputElement.id = Date.now().toString();
             inputElement.type = 'number';
@@ -336,7 +356,7 @@ function createInputElement(elementType) {
         case 'Iframe':
             inputElement = document.createElement('iframe');
             inputElement.id = Date.now().toString();
-            inputElement.src="vue-app.html"
+            inputElement.src = "vue-app.html"
             break;
         default:
             inputElement = document.createElement('input');
