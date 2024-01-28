@@ -12,12 +12,13 @@
 <body>
     <nav class="navbar navbar-dark bg-dark">
         <a class="navbar-brand" href="#">Dynamic Form Builder</a>
-      </nav>
+    </nav>
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-3">
                 <div class="toolbox">
-                    <ul class="nav nav-tabs">
+                    <ul class="nav nav-tabs nav-fill">
                         <li class="nav-item">
                             <a class="nav-link active" id="controls-tab" data-toggle="tab" href="#controls">Controls</a>
                         </li>
@@ -45,7 +46,8 @@
                 </div>
             </div>
 
-            <div id="designer" class="col-md-6 designer" ondragleave="removeHighlight(event)" ondragenter="highlightDropArea(event)" oncontextmenu="return false;">
+            <div id="designer" class="col-md-6 designer" ondragleave="removeHighlight(event)"
+                ondragenter="highlightDropArea(event)" oncontextmenu="return false;">
                 <!-- Designer Section -->
             </div>
 

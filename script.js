@@ -1,10 +1,4 @@
-// # #######################################   Left Toolbox
-
-const formSpec = [];
-let jsonSchema = [];
-let uiSchema = [];
 let selectedControl = null;
-
 const controls = [
     { key: 'Textbox', icon: 'bi-fonts', description: 'Text Input' },
     { key: 'Dropdown', icon: 'bi-arrow-down-square-fill', description: 'Dropdown Selection' },
@@ -17,7 +11,7 @@ const controls = [
     { key: 'Slider', icon: 'bi-sliders', description: 'Slider Input' },
     { key: 'File Upload', icon: 'bi-file-earmark-arrow-up', description: 'File Upload' },
     { key: 'Label', icon: 'bi-bookmark', description: 'Label' },
-    { key: 'Button', icon: 'button-icon', description: 'Button' },
+    { key: 'Button', icon: 'bi-btn', description: 'Button' },
     { key: 'Column', icon: 'bi-microsoft', description: 'Column' },
     { key: 'Row', icon: 'bi-menu-button-wide', description: 'Row' },
     { key: 'Iframe', icon: 'bi-bounding-box', description: 'Row' }
@@ -82,7 +76,6 @@ function createToolboxItem(control) {
 
     return rootElement;
 }
-// # #######################################  Left Toolbox
 
 function handleDrop(e) {
     e.preventDefault();
@@ -90,72 +83,24 @@ function handleDrop(e) {
     highlightedDropArea.classList.remove('highlight-dragover');
     const elementType = e.dataTransfer.getData('text/plain');
 
-    
-    jsonSchema.push({
+    schema.push({
         type: elementType,
         id: Date.now().toString(),
         name: elementType,
         label: elementType,
         placeholder: elementType,
         required: false,
-        min: '',
-        max: '',
-        step: '',
         value: '',
-        defaultValue: '',
         options: [],
         multiple: false,
         accept: ''
     });
 
-    if (elementType === 'Row' || elementType === 'Column') {
-        // Create a div element for the row or column
-        const div = document.createElement('div');
 
-        div.classList.add("row", "show-hover");// Adjust the height as needed
+    var form = new FormBuilder(schema);
+    form.render('#designer');
+    //createControlInDesigner(elementType, e);
 
-        const controlElement = document.createElement('div');
-        controlElement.style.margin = '2px';
-        controlElement.classList.add(elementType.toLowerCase(), "col-md-6");
-        controlElement.style.border = '2px solid #000'; // 1px border
-        controlElement.style.minHeight = '50px'; // Adjust the height as needed
-
-        const controlElement1 = document.createElement('div');
-
-        controlElement1.classList.add(elementType.toLowerCase(), "col-md-6");
-        controlElement1.style.border = '2px solid #000'; // 1px border
-        controlElement1.style.minHeight = '50px'; // Adjust the height as needed
-
-        const controlElement2 = document.createElement('div');
-
-        controlElement2.classList.add(elementType.toLowerCase(), "col-md-12");
-        controlElement2.style.border = '2px solid #000'; // 1px border
-        controlElement2.style.minHeight = '50px'; // Adjust the height as needed
-
-        // Make the row or column resizable
-        //resizableControl(controlElement);
-
-        // Make the control draggable within the designer
-        //controlElement.draggable = true;
-
-        controlElement.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                type: elementType,
-                id: Date.now().toString()
-            }));
-        });
-        controlElement.addEventListener('drop', handleDropInGrid);
-
-        div.appendChild(controlElement);
-        div.appendChild(controlElement1);
-        div.appendChild(controlElement2);
-        designer.append(div);
-
-    }
-    else {
-        //RefreshDesigner();
-        createControlInDesigner(elementType, e);
-    }
 }
 
 function highlightDropArea(event) {
@@ -172,271 +117,325 @@ function removeHighlight(event) {
     // Check if the dragged item is a control
 }
 
+// # #######################################  Left Toolbox
 
-/**
- * Refreshes the designer UI by re-rendering the JSON schema.
- */
-function RefreshDesigner() {
-
-    const designer = document.getElementById('designer');
-    designer.innerHTML = '';
-
-    const form = document.createElement('form');
-    form.id = 'form';
-    form.onsubmit = (e) => {
-        e.preventDefault();
-        console.log(jsonSchema);
-    };
-
-    jsonSchema.forEach(element => {
-        const elementType = element.type;
-        const controlElement = createControlInDesigner(element);
-        form.appendChild(controlElement);
-    });
-
-    designer.appendChild(form);
-}
-
-function handleDropInGrid(e) {
-    e.preventDefault();
-    const elementType = e.dataTransfer.getData('text/plain');
-    console.log(elementType);
-    createControlInsideElement(elementType, e);
-}
-
-
-function createControlInsideElement(elementType, e) {
-    const designer = document.getElementById(elementType.id);
-    const controlElement = createControlElement(elementType);
-
-    if (elementType === 'Row' || elementType === 'Column') {
-        // Create a div element for the row or column
-        const controlElement = document.createElement('div');
-        controlElement.classList.add(elementType.toLowerCase());
-        controlElement.style.border = '1px solid #000'; // 1px border
-        controlElement.style.minHeight = '20px'; // Adjust the height as needed
-
-        // Make the row or column resizable
-        //resizableControl(controlElement);
-
-        // Make the control draggable within the designer
-        controlElement.draggable = true;
-
-        controlElement.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                type: elementType,
-                id: Date.now().toString()
-            }));
-        });
-        controlElement.addEventListener('drop', handleDropInGrid);
-
-        designer.appendChild(controlElement);
-
-    }
-    else {
-        controlElement.addEventListener('click', () => {
-            selectedControl = controlElement;
-            showControlProperties(elementType);
-        });
-
-        // Make the control draggable within the designer
-        controlElement.draggable = true;
-
-        controlElement.addEventListener('dragstart', (e) => {
-            e.dataTransfer.setData('text/plain', JSON.stringify({
-                type: elementType,
-                id: Date.now().toString()
-            }));
-        });
-
-        designer.appendChild(controlElement);
-
-
-    }
-    // Update the JSON Schema with the new control
-    jsonSchema.push({
-        type: elementType,
-        id: Date.now().toString(),
-        name: '',
-        label: '',
-        placeholder: '',
-        required: false,
-        min: '',
-        max: '',
-        step: '',
-        value: '',
-        defaultValue: '',
-        options: [],
-        multiple: false,
-        accept: ''
-    });
-    // Render the updated JSON Schema
-    renderJsonSchema();
-}
-
-
-
-
-function createControlInDesigner(elementType, e) {
-    const designer = document.getElementById('designer');
-    const controlElement = createControlElement(elementType);
-
-    controlElement.addEventListener('click', () => {
-        selectedControl = controlElement;
-        showControlProperties(elementType);
-    });
-
-    // Make the control draggable within the designer
-    //controlElement.draggable = true;
-
-    controlElement.addEventListener('dragstart', (e) => {
-        e.dataTransfer.setData('text/plain', JSON.stringify({
-            type: elementType,
-            id: Date.now().toString()
-        }));
-    });
-
-    designer.appendChild(controlElement);
-
-    // Update the JSON Schema with the new control
-    jsonSchema.push({
-        type: elementType,
-        id: Date.now().toString(),
-        name: '',
-        label: '',
-        placeholder: '',
-        required: false,
-        min: '',
-        max: '',
-        step: '',
-        value: '',
-        defaultValue: '',
-        options: [],
-        multiple: false,
-        accept: ''
-    });
-    // Render the updated JSON Schema
-    renderJsonSchema();
-}
-
-
-function createControlElement(elementType) {
-    // Create form group
-    const controlElement = document.createElement('div');
-    controlElement.classList.add('form-group', 'show-hover');
-    controlElement.dataset.type = elementType;
-    controlElement.style.width = '100%';
-    
-    // Create Label
-    let labelElement = document.createElement('label');;
-    labelElement.innerHTML = elementType;
-    controlElement.appendChild(labelElement);
-
-    // Create Actual ontrol
-    const inputElement = createInputElement(elementType);
-    controlElement.appendChild(inputElement);
-    return controlElement;
-}
-
-function createInputElement(elementType) {
-    let inputElement;
-
-    switch (elementType) {
-        case 'Textbox':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'text';
-            break;
-        case 'Number':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'number';
-            break;
-        case 'URL':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'url';
-            break;
-        case 'Email':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'email';
-            break;
-        case 'Dropdown':
-            inputElement = document.createElement('select');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.appendChild(createOption('Option 1'));
-            break;
-        case 'Checkbox':
-        case 'Radio':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = elementType.toLowerCase();
-            break;
-        case 'Date Picker':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'date';
-            break;
-        case 'Slider':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'range';
-            break;
-        case 'File Upload':
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'file';
-            break;
-        case 'Label':
-            inputElement = document.createElement('label');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.innerText = 'Label';
-            break;
-        case 'Button':
-            inputElement = document.createElement('button');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.innerText = 'Button';
-            break;
-        case 'Iframe':
-            inputElement = document.createElement('iframe');
-            inputElement.id = Date.now().toString();
-            inputElement.src = "vue-app.html"
-            break;
-        default:
-            inputElement = document.createElement('input');
-            inputElement.classList.add('form-control');
-            inputElement.id = Date.now().toString();
-            inputElement.type = 'text';
+class FormBuilder {
+    constructor(schema) {
+        this.schema = schema;
     }
 
-    return inputElement;
+
+
+    render(container) {
+        this.container = document.querySelector(container);
+        this.container.innerHTML = '';
+        this.form = document.createElement('form');
+        this.container.appendChild(this.form);
+
+        this.schema.forEach(field => {
+            const element = this.createField(field);
+            this.form.appendChild(element);
+        });
+    }
+
+    createField(field) {
+        switch (field.type) {
+            case 'Textbox':
+                return this.createTextBox(field);
+            case 'Dropdown':
+                return this.createSelect(field);
+            case 'Number':
+                return this.createNumber(field);
+            case 'Radio':
+                return this.createRadio(field);
+            case 'Column':
+                return this.createLayout(2, 2);
+            case 'Row':
+                return this.renderLayout();
+
+            // etc for other field types
+        }
+    }
+
+    createTextBox(field) {
+        const wrapper = document.createElement('div');
+        wrapper.classList.add('form-group', 'show-hover');
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+        input.classList.add('form-control');
+        label.textContent = field.label;
+        input.id = field.id;
+        input.type = 'text';
+        input.name = field.name;
+        input.placeholder = field.placeholder;
+        wrapper.name = field.name;
+        wrapper.addEventListener('click', () => {
+            selectedControl = wrapper;
+            showControlProperties(input);
+        });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+
+        return wrapper;
+    }
+
+    createSelect(field) {
+        const wrapper = document.createElement('div');
+
+        const label = document.createElement('label');
+        label.textContent = field.label;
+        wrapper.name = field.name;
+        const select = document.createElement('select');
+        select.name = field.name;
+        select.classList.add('form-control');
+        select.id = field.id;
+        wrapper.addEventListener('click', () => {
+            selectedControl = wrapper;
+            showControlProperties(select);
+        });
+
+        field.options.forEach(option => {
+            const opt = document.createElement('option');
+            opt.value = option.value;
+            opt.textContent = option.label;
+            select.appendChild(opt);
+        });
+
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(select);
+
+        return wrapper;
+    }
+
+    createNumber(field) {
+        const wrapper = document.createElement('div');
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+
+        wrapper.name = field.name;
+        input.id = field.id;
+        input.classList.add('form-control');
+        label.innerHTML = field.label;
+        input.type = 'number';
+        input.name = field.name;
+        input.placeholder = field.placeholder;
+        wrapper.addEventListener('click', () => {
+            selectedControl = wrapper;
+            showControlProperties(input);
+        });
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+
+        return wrapper;
+    }
+
+    createRadio(field) {
+        const wrapper = document.createElement('div');
+        const label = document.createElement('label');
+        const input = document.createElement('input');
+
+        wrapper.name = field.name;
+        input.id = field.id;
+        input.classList.add('form-control');
+        label.innerHTML = field.label;
+        input.type = 'radio';
+        input.name = field.name;
+        input.placeholder = field.placeholder;
+
+        wrapper.appendChild(label);
+        wrapper.appendChild(input);
+
+        return wrapper;
+    }
+
+    // Create rows and cols 
+    createLayout(rows, cols) {
+
+        // Outer container
+        const container = document.createElement('div');
+        container.classList.add('container');
+
+        for (let i = 0; i < rows; i++) {
+
+            // Create row
+            const row = document.createElement('div');
+            row.classList.add('row');
+
+            for (let j = 0; j < cols; j++) {
+
+                // Create column
+                const col = document.createElement('div');
+
+                // Size column based on number of cols
+                col.classList.add('col-md-' + (12 / cols));
+
+                // Add styling
+                col.style.border = '1px solid';
+                col.style.padding = '10px';
+
+                row.appendChild(col);
+
+            }
+
+            container.appendChild(row);
+
+        }
+
+        return container;
+
+    }
+    // Recursive function to render layout 
+    renderLayout() {
+        var layout = {
+            "type": "layout",
+            "rows": [
+                {
+                    "cols": {
+                        "length": 4,
+                        "elements": [
+                            { "type": "textbox" },
+                            { "type": "textbox" }
+                        ]
+                    }
+                }
+            ]
+        };
+        if (layout.type === 'layout') {
+
+            // Render layout rows
+            const row = document.createElement('div');
+            row.classList.add('row');
+
+            layout.rows.forEach(row => {
+                this.renderRow(row, row);
+            });
+
+            return row;
+
+        } else {
+
+            // Render control 
+            return createControl(layout);
+
+        }
+
+    }
+
+    // Render row with columns
+    renderRow(row, parent) {
+
+        const rowEl = document.createElement('div');
+        rowEl.classList.add('row');
+        const cols = row.cols;
+        cols.elements.forEach(col => {
+
+            const colEl = document.createElement('div');
+
+            // Size based on nested columns
+            colEl.classList.add('col-md-' + 12 / row.cols.length);
+
+            // Render column content
+            colEl.appendChild(this.renderLayout());
+
+            rowEl.appendChild(colEl);
+
+        });
+
+        parent.appendChild(rowEl);
+
+    }
+    // Usage
+
+
+    // Other field creation methods
+
+    getValue() {
+        // Get field values
+    }
+
+    validate() {
+        // Validate form
+    }
 }
+// Schema 
+let schema = [
+    // {
+    //     id: 'Textbox1',
+    //     type: 'Textbox',
+    //     name: 'username',
+    //     label: 'Username',
+    //     placeholder: 'Username'
+    // },
+    // {
+    //     id: 'Radio1',
+    //     type: 'Radio',
+    //     name: 'choose',
+    //     label: 'choose',
+    //     placeholder: 'choose',
+    // },
+    // {
+    //     id: 'Number1',
+    //     type: 'Number',
+    //     name: 'age',
+    //     label: 'age',
+    //     placeholder: 24,
+    // },
+    // {
+    //     id: 'Dropdown1',
+    //     type: 'Dropdown',
+    //     name: 'gender',
+    //     options: [{
+    //         label: 'Male',
+    //         value: 'Male'
+    //     }],
+    //     placeholder: ''
+    // }
+]
 
-function createOption(value) {
-    const option = document.createElement('option');
-    option.value = value;
-    option.text = value;
-    return option;
-}
+let uischema = [
+    {
+        type: 'text',
+        name: 'username'
+    },
+    {
+        type: 'radio',
+        name: 'username'
+    },
+    {
+        type: 'select',
+        name: 'gender',
+        options: [{
+            label: 'Male',
+            value: 'Male'
+        }]
+    }
+]
 
-
-
-function renderJsonSchema() {
-    const jsonSchemaDisplay = document.getElementById('json-schema');
-    jsonSchemaDisplay.innerHTML = JSON.stringify(jsonSchema, null, 2);
-}
+let lookupData = [
+    {
+        id: 'text',
+        data: []
+    },
+    {
+        type: 'radio',
+        name: 'username'
+    },
+    {
+        type: 'select',
+        name: 'gender',
+        options: [{
+            label: 'Male',
+            value: 'Male'
+        }]
+    }
+]
+// Usage
+init();
+const form = new FormBuilder(schema);
+form.render('#designer');
 
 function renderDesigner() {
     const designer = document.getElementById('designer');
@@ -457,10 +456,8 @@ function handleDragOver(e) {
 function init() {
     renderToolbox();
     renderDesigner();
-    renderJsonSchema();
 }
 
-init();
 // ############# PROPERTY WINDOW
 
 function showControlProperties(elementType) {
@@ -468,13 +465,13 @@ function showControlProperties(elementType) {
     properties.innerHTML = '';
 
     const propertiesHeader = document.createElement('h4');
-    propertiesHeader.innerText = `Properties for ${elementType}`;
+    propertiesHeader.innerText = `Properties for ${elementType.name}`;
     properties.appendChild(propertiesHeader);
 
-    const nameInput = createPropertyInput('Name', 'text', 'name', selectedControl ? selectedControl.name || '' : '');
-    const idInput = createPropertyInput('ID', 'text', 'id', selectedControl ? selectedControl.id || '' : '');
-    const classInput = createPropertyInput('Class', 'text', 'mt-5', selectedControl ? selectedControl.value || '' : '');
-    const requiredInput = createPropertyInput('Required', 'checkbox', 'required', selectedControl ? selectedControl.required || false : '');
+    const nameInput = createPropertyInput('name', 'text', 'name', selectedControl ? selectedControl.children[1].name || '' : '');
+    const idInput = createPropertyInput('id', 'text', 'id', selectedControl ? selectedControl.children[1].id || '' : '');
+    const classInput = createPropertyInput('class', 'text', 'class', selectedControl ? selectedControl.children[1].class || '' : '');
+    const requiredInput = createPropertyInput('value', 'text', 'value', selectedControl ? selectedControl.children[1].value || false : '');
 
     properties.appendChild(nameInput);
     properties.appendChild(idInput);
@@ -497,7 +494,7 @@ function showControlProperties(elementType) {
 
 function createPropertyInput(labelText, inputType, id, value) {
     const formGroup = document.createElement('div');
-    formGroup.classList.add('form-group');
+    formGroup.classList.add('form-group', 'mt-5');
 
     const label = document.createElement('label');
     label.innerText = labelText;
@@ -505,7 +502,7 @@ function createPropertyInput(labelText, inputType, id, value) {
     const input = document.createElement('input');
     input.type = inputType;
     input.id = id;
-    input.classList.add('form-control', 'props');
+    input.classList.add('form-control', 'props',);
     input.value = value || '';
 
     formGroup.appendChild(label);
@@ -520,12 +517,12 @@ function updateControlProperties() {
     const name = document.getElementById('name').value;
     const id = document.getElementById('id').value;
     const value = document.getElementById('value').value;
-    const required = document.getElementById('required').checked;
+    const cssClass = document.getElementById('class').value;
 
     selectedControl.name = name;
     selectedControl.id = id;
-    selectedControl.value = value;
-    selectedControl.required = required;
+    selectedControl.children[1].value = value;
+    selectedControl.classList.add(cssClass);
 
     hideProperties();
 }
@@ -543,11 +540,11 @@ function removeControl() {
     selectedControl.remove();
 
     // Remove the corresponding entry from the JSON Schema
-    const controlId = selectedControl.dataset.id;
-    jsonSchema = jsonSchema.filter(control => control.id !== controlId);
-
-    // Render the updated JSON Schema
-    renderJsonSchema();
+    const controlId = selectedControl.children[1].id;
+    schema = schema.filter(control => control.id !== controlId);
+    console.log(schema);
+    // // Render the updated JSON Schema
+    // renderJsonSchema();
 
     // Clear the properties section
     hideProperties();
