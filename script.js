@@ -89,6 +89,7 @@ function handleDrop(e) {
     highlightedDropArea.classList.remove('highlight-dragover');
     const elementType = e.dataTransfer.getData('text/plain');
 
+    
     jsonSchema.push({
         type: elementType,
         id: Date.now().toString(),
@@ -105,7 +106,7 @@ function handleDrop(e) {
         multiple: false,
         accept: ''
     });
-    
+
     if (elementType === 'Row' || elementType === 'Column') {
         // Create a div element for the row or column
         const div = document.createElement('div');
