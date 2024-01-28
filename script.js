@@ -12,7 +12,10 @@ const controls = [
     'Label',
     'Button',
     'Column',
-    'Row'
+    'Row',
+    'Form-1',
+    'Form-2',
+    'Iframe'
 ];
 
 let jsonSchema = [];
@@ -31,9 +34,9 @@ function renderToolbox() {
     controls.forEach(control => {
         const controlElement = createToolboxItem(control);
 
-        if (control.startsWith('Label') || control.startsWith('Button')) {
+        if (control.startsWith('Form') || control.startsWith('FTForm')) {
             // Add to the "Form" tab
-            controlsTab.appendChild(controlElement);
+            formTab.appendChild(controlElement);
         } else if (control === 'Column' || control === 'Row') {
             // Add to the "Layout" tab
             layoutTab.appendChild(controlElement);
@@ -74,13 +77,34 @@ function hideProperties() {
 function createControlInDesigner(elementType, e) {
     const designer = document.getElementById('designer');
     const controlElement = createControlElement(elementType);
-
+    if (elementType.startsWith('Form')) {
+    }
+    else
     if (elementType === 'Row' || elementType === 'Column') {
         // Create a div element for the row or column
+        const div = document.createElement('div');
+
+        div.classList.add("row", "show-hover");// Adjust the height as needed
+
+
+
         const controlElement = document.createElement('div');
-        controlElement.classList.add(elementType.toLowerCase());
-        controlElement.style.border = '1px solid #000'; // 1px border
-        controlElement.style.minHeight = '20px'; // Adjust the height as needed
+
+        controlElement.classList.add(elementType.toLowerCase(),"col-md-6");
+        controlElement.style.border = '5px solid #000'; // 1px border
+        controlElement.style.minHeight = '50px'; // Adjust the height as needed
+
+        const controlElement1 = document.createElement('div');
+        
+        controlElement1.classList.add(elementType.toLowerCase(),"col-md-6");
+        controlElement1.style.border = '5px solid #000'; // 1px border
+        controlElement1.style.minHeight = '50px'; // Adjust the height as needed
+
+        const controlElement2 = document.createElement('div');
+        
+        controlElement2.classList.add(elementType.toLowerCase(),"col-md-12");
+        controlElement2.style.border = '5px solid #000'; // 1px border
+        controlElement2.style.minHeight = '50px'; // Adjust the height as needed
 
         // Make the row or column resizable
         //resizableControl(controlElement);
@@ -95,7 +119,10 @@ function createControlInDesigner(elementType, e) {
             }));
         });
 
-        designer.appendChild(controlElement);
+        div.appendChild(controlElement);
+        div.appendChild(controlElement1);
+        div.appendChild(controlElement2);
+        designer.append(div);
 
     }
     else {
@@ -157,11 +184,11 @@ function createControlElement(elementType) {
     controlElement.classList.add('form-control', 'show-hover');
     controlElement.dataset.type = elementType;
     controlElement.style.width = '100%';
-
     const inputElement = createInputElement(elementType);
+
     controlElement.appendChild(inputElement);
 
-    return inputElement;
+    return controlElement;
 }
 
 function createInputElement(elementType) {
@@ -224,6 +251,11 @@ function createInputElement(elementType) {
             inputElement.id = Date.now().toString();
             inputElement.innerText = 'Button';
             break;
+        case 'Iframe':
+            inputElement = document.createElement('iframe');
+            inputElement.id = Date.now().toString();
+            inputElement.src="vue-app.html"
+            break;
         default:
             inputElement = document.createElement('input');
             inputElement.id = Date.now().toString();
@@ -250,7 +282,7 @@ function showControlProperties(elementType) {
 
     const nameInput = createPropertyInput('Name', 'text', 'name', selectedControl ? selectedControl.name || '' : '');
     const idInput = createPropertyInput('ID', 'text', 'id', selectedControl ? selectedControl.id || '' : '');
-    const classInput = createPropertyInput('Class', 'text', 'value', selectedControl ? selectedControl.value || '' : '');
+    const classInput = createPropertyInput('Class', 'text', 'mt-5', selectedControl ? selectedControl.value || '' : '');
     const requiredInput = createPropertyInput('Required', 'checkbox', 'required', selectedControl ? selectedControl.required || false : '');
 
     properties.appendChild(nameInput);
@@ -259,13 +291,13 @@ function showControlProperties(elementType) {
     properties.appendChild(requiredInput);
 
     const updateButton = document.createElement('button');
-    updateButton.classList.add('btn', 'btn-primary', 'mt-2');
+    updateButton.classList.add('btn', 'btn-primary', 'mt-5');
     updateButton.innerText = 'Update';
     updateButton.addEventListener('click', updateControlProperties);
     properties.appendChild(updateButton);
 
     const removeButton = document.createElement('button');
-    removeButton.classList.add('btn', 'btn-danger', 'mt-2');
+    removeButton.classList.add('btn', 'btn-danger', 'mt-5');
     removeButton.innerText = 'Remove';
     removeButton.addEventListener('click', removeControl);
     properties.appendChild(removeButton);
