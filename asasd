@@ -1,0 +1,247 @@
+// Sample controls for the toolbox
+const controls = [
+    'Grid',
+    'Textbox', 
+    'Dropdown', 
+    'Number Input', 
+    'URL', 
+    'Email', 
+    'Checkbox', 
+    'Radio', 
+    'Date Picker', 
+    'Slider', 
+    'File Upload',
+    'Label', 
+    'Button'
+];
+
+// JSON schema object
+let jsonSchema = [];
+
+// Function to render toolbox
+function renderToolbox() {
+    const toolbox = document.getElementById('toolbox');
+    toolbox.innerHTML = '';
+    
+    controls.forEach(control => {
+        const controlElement = document.createElement('div');
+        controlElement.classList.add('toolbox-item');
+        controlElement.draggable = true;
+        controlElement.dataset.type = control;
+        controlElement.innerText = control;
+        toolbox.appendChild(controlElement);
+    });
+}
+
+// Function to handle drag start
+function handleDragStart(e) {
+    e.dataTransfer.setData('text/plain', e.target.dataset.type);
+}
+
+// Function to render designer canvas
+function renderDesigner() {
+    const designer = document.getElementById('designer');
+    designer.innerHTML = '';
+
+    designer.addEventListener('dragover', handleDragOver);
+    designer.addEventListener('drop', handleDrop);
+}
+
+// Function to handle drag over
+function handleDragOver(e) {
+    e.preventDefault();
+}
+
+// Function to handle drop
+function handleDrop(e) {
+    e.preventDefault();
+    const elementType = e.dataTransfer.getData('text/plain');
+    
+    if (elementType === 'Grid') {
+        createGridInDesigner();
+    } else {
+        createControlInDesigner(elementType, e);
+    }
+}
+
+// Function to create grid in designer
+function createGridInDesigner() {
+    const designer = document.getElementById('designer');
+    designer.innerHTML = '';
+
+    const gridElement = document.createElement('div');
+    gridElement.classList.add('grid');
+    gridElement.style.setProperty('--columns', prompt('Enter number of columns:', '3'));
+    gridElement.style.setProperty('--rows', prompt('Enter number of rows:', '3'));
+
+    // Add grid items
+    for (let i = 0; i < parseInt(gridElement.style.getPropertyValue('--columns')) * parseInt(gridElement.style.getPropertyValue('--rows')); i++) {
+        const gridItem = document.createElement('div');
+        gridItem.classList.add('grid-item');
+        gridElement.appendChild(gridItem);
+    }
+
+    designer.appendChild(gridElement);
+
+    // Update JSON schema
+    jsonSchema = [{
+        id: 'grid',
+        type: 'grid',
+        position: {
+            top: 0,
+            left: 0
+        },
+        gridSize: {
+            rows: parseInt(gridElement.style.getPropertyValue('--rows')),
+            columns: parseInt(gridElement.style.getPropertyValue('--columns'))
+        }
+    }];
+
+    // Update JSON schema display
+    renderJsonSchema();
+}
+
+// Function to create control in designer
+function createControlInDesigner(elementType, e) {
+    const designer = document.getElementById('designer');
+    
+    // Create the control element
+    const controlElement = document.createElement('div');
+    controlElement.classList.add('form-control');
+    controlElement.dataset.type = elementType;
+
+    // Set position based on the drop location
+    const gridSize = getGridSize();
+    const cellWidth = designer.offsetWidth / gridSize.columns;
+    const cellHeight = designer.offsetHeight / gridSize.rows;
+    
+    controlElement.style.position = 'absolute';
+    controlElement.style.left = Math.floor((e.clientX - designer.getBoundingClientRect().left) / cellWidth) * cellWidth + 'px';
+    controlElement.style.top = Math.floor((e.clientY - designer.getBoundingClientRect().top) / cellHeight) * cellHeight + 'px';
+
+    // Create input element based on the control type
+    let inputElement;
+
+    switch (elementType) {
+        case 'Textbox':
+        case 'Number Input':
+        case 'URL':
+        case 'Email':
+            inputElement = document.createElement('input');
+            inputElement.type = 'text';
+            break;
+        case 'Dropdown':
+            inputElement = document.createElement('select');
+            inputElement.appendChild(createOption('Option 1'));
+            break;
+        case 'Checkbox':
+        case 'Radio':
+            inputElement = document.createElement('input');
+            inputElement.type = elementType.toLowerCase();
+            break;
+        case 'Date Picker':
+            inputElement = document.createElement('input');
+            inputElement.type = 'date';
+            break;
+        case 'Slider':
+            inputElement = document.createElement('input');
+            inputElement.type = 'range';
+            break;
+        case 'File Upload':
+            inputElement = document.createElement('input');
+            inputElement.type = 'file';
+            break;
+        case 'Label':
+            const labelContent = prompt('Enter label text:');
+            inputElement = document.createElement('label');
+            inputElement.innerText = labelContent || 'Label';
+            break;
+        case 'Button':
+            const buttonText = prompt('Enter button text:');
+            inputElement = document.createElement('button');
+            inputElement.innerText = buttonText || 'Button';
+            break;
+        // Add cases for other control types as needed
+        default:
+            inputElement = document.createElement('input');
+            inputElement.type = 'text';
+    }
+
+    controlElement.appendChild(inputElement);
+    designer.appendChild(controlElement);
+
+    // Update JSON schema
+    const controlId = `control_${Date.now()}`;
+    const controlName = (elementType === 'Label' || elementType === 'Button') ? inputElement.innerText : '';
+    jsonSchema.push({
+        id: controlId,
+        type: elementType,
+        name: controlName,
+        validation: '', // Add validation logic if needed
+        cssClass: '',
+        required: false,
+        position: {
+            top: parseFloat(controlElement.style.top),
+            left: parseFloat(controlElement.style.left)
+        }
+    });
+
+    // Update JSON schema display
+    renderJsonSchema();
+}
+
+// Function to create option for dropdown
+function createOption(value) {
+    const option = document.createElement('option');
+    option.value = value;
+    option.text = value;
+    return option;
+}
+
+// Function to get grid size from JSON schema
+function getGridSize() {
+    const gridInfo = jsonSchema.find(item => item.type === 'grid');
+    if (gridInfo) {
+        return gridInfo.gridSize;
+    } else {
+        // Default grid size
+        return { rows: 1, columns: 1 };
+    }
+}
+
+// Function to handle drag start within the designer
+function handleControlDragStart(e) {
+    const controlElement = e.target;
+    e.dataTransfer.setData('text/plain', controlElement.dataset.type);
+}
+
+// Function to handle drag over within the designer
+function handleControlDragOver(e) {
+    e.preventDefault();
+}
+
+// Function to handle drop within the designer
+function handleControlDrop(e) {
+    e.preventDefault();
+    const elementType = e.dataTransfer.getData('text/plain');
+
+    if (elementType !== 'Grid') {
+        createControlInDesigner(elementType, e);
+    }
+}
+
+// Function to render JSON schema
+function renderJsonSchema() {
+    const jsonSchemaDisplay = document.getElementById('json-schema');
+    jsonSchemaDisplay.innerHTML = JSON.stringify(jsonSchema, null, 2);
+}
+
+// Initialize the application
+function init() {
+    renderToolbox();
+    renderDesigner();
+    renderJsonSchema();
+}
+
+// Run the initialization
+init();

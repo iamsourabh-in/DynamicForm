@@ -1,18 +1,23 @@
+//The Script is prepared for the following:
+// Show the controls in the toolbox
+// Render the controls in the designer
+// Add the controls to the JSON schema
+
 const controls = [
-    'Textbox',
-    'Dropdown',
-    'Number Input',
-    'URL',
-    'Email',
-    'Checkbox',
-    'Radio',
-    'Date Picker',
-    'Slider',
-    'File Upload',
-    'Label',
-    'Button',
-    'Column',
-    'Row'
+    { key: 'Textbox', icon: 'textbox-icon', description: 'Text Input' },
+    { key: 'Dropdown', icon: 'dropdown-icon', description: 'Dropdown Selection' },
+    { key: 'Number', icon: 'number-input-icon', description: 'Numeric Input' },
+    { key: 'URL', icon: 'url-icon', description: 'URL Input' },
+    { key: 'Email', icon: 'email-icon', description: 'Email Input' },
+    { key: 'Checkbox', icon: 'checkbox-icon', description: 'Checkbox' },
+    { key: 'Radio', icon: 'radio-icon', description: 'Radio Button' },
+    { key: 'Date Picker', icon: 'date-picker-icon', description: 'Date Picker' },
+    { key: 'Slider', icon: 'slider-icon', description: 'Slider Input' },
+    { key: 'File Upload', icon: 'file-upload-icon', description: 'File Upload' },
+    { key: 'Label', icon: 'label-icon', description: 'Label' },
+    { key: 'Button', icon: 'button-icon', description: 'Button' },
+    { key: 'Column', icon: 'column-icon', description: 'Column' },
+    { key: 'Row', icon: 'row-icon', description: 'Row' }
 ];
 
 let jsonSchema = [];
@@ -31,7 +36,7 @@ function renderToolbox() {
     controls.forEach(control => {
         const controlElement = createToolboxItem(control);
 
-        if (control.startsWith('Label') || control.startsWith('Button')) {
+        if (control.key.startsWith('Label') || control.key.startsWith('Button')) {
             // Add to the "Form" tab
             controlsTab.appendChild(controlElement);
         } else if (control === 'Column' || control === 'Row') {
@@ -44,12 +49,12 @@ function renderToolbox() {
     });
 }
 
-function createToolboxItem(controlType) {
+function createToolboxItem(control) {
     const controlElement = document.createElement('div');
     controlElement.classList.add('toolbox-item');
     controlElement.draggable = true;
-    controlElement.dataset.type = controlType;
-    controlElement.innerText = controlType;
+    controlElement.dataset.type = control.key;
+    controlElement.innerText = control.key;
 
     controlElement.addEventListener('dragstart', (e) => {
         e.dataTransfer.setData('text/plain', controlType);
@@ -64,6 +69,85 @@ function handleDrop(e) {
     const elementType = e.dataTransfer.getData('text/plain');
     createControlInDesigner(elementType, e);
 }
+
+
+function handleDropInGrid(e) {
+    e.preventDefault();
+    const elementType = e.dataTransfer.getData('text/plain');
+    console.log(elementType);
+    createControlInsideElement(elementType, e);
+}
+
+
+function createControlInsideElement(elementType, e) {
+    const designer = document.getElementById(elementType.id);
+    const controlElement = createControlElement(elementType);
+
+    if (elementType === 'Row' || elementType === 'Column') {
+        // Create a div element for the row or column
+        const controlElement = document.createElement('div');
+        controlElement.classList.add(elementType.toLowerCase());
+        controlElement.style.border = '1px solid #000'; // 1px border
+        controlElement.style.minHeight = '20px'; // Adjust the height as needed
+
+        // Make the row or column resizable
+        //resizableControl(controlElement);
+
+        // Make the control draggable within the designer
+        controlElement.draggable = true;
+
+        controlElement.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                type: elementType,
+                id: Date.now().toString()
+            }));
+        });
+        controlElement.addEventListener('drop', handleDropInGrid);
+
+        designer.appendChild(controlElement);
+
+    }
+    else {
+        controlElement.addEventListener('click', () => {
+            selectedControl = controlElement;
+            showControlProperties(elementType);
+        });
+
+        // Make the control draggable within the designer
+        controlElement.draggable = true;
+
+        controlElement.addEventListener('dragstart', (e) => {
+            e.dataTransfer.setData('text/plain', JSON.stringify({
+                type: elementType,
+                id: Date.now().toString()
+            }));
+        });
+
+        designer.appendChild(controlElement);
+
+
+    }
+    // Update the JSON Schema with the new control
+    jsonSchema.push({
+        type: elementType,
+        id: Date.now().toString(),
+        name: '',
+        label: '',
+        placeholder: '',
+        required: false,
+        min: '',
+        max: '',
+        step: '',
+        value: '',
+        defaultValue: '',
+        options: [],
+        multiple: false,
+        accept: ''
+    });
+    // Render the updated JSON Schema
+    renderJsonSchema();
+}
+
 
 function hideProperties() {
     const properties = document.getElementById('properties');
@@ -86,7 +170,7 @@ function createControlInDesigner(elementType, e) {
         //resizableControl(controlElement);
 
         // Make the control draggable within the designer
-        controlElement.draggable = true;
+        //controlElement.draggable = true;
 
         controlElement.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', JSON.stringify({
@@ -94,6 +178,7 @@ function createControlInDesigner(elementType, e) {
                 id: Date.now().toString()
             }));
         });
+        controlElement.addEventListener('drop', handleDropInGrid);
 
         designer.appendChild(controlElement);
 
@@ -105,7 +190,7 @@ function createControlInDesigner(elementType, e) {
         });
 
         // Make the control draggable within the designer
-        controlElement.draggable = true;
+        //controlElement.draggable = true;
 
         controlElement.addEventListener('dragstart', (e) => {
             e.dataTransfer.setData('text/plain', JSON.stringify({
