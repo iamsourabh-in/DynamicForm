@@ -1,4 +1,81 @@
 let selectedControl = null;
+// Schema
+let schema = [
+  // {
+  //     id: 'Textbox1',
+  //     type: 'Textbox',
+  //     name: 'username',
+  //     label: 'Username',
+  //     placeholder: 'Username'
+  // },
+  // {
+  //     id: 'Radio1',
+  //     type: 'Radio',
+  //     name: 'choose',
+  //     label: 'choose',
+  //     placeholder: 'choose',
+  // },
+  // {
+  //     id: 'Number1',
+  //     type: 'Number',
+  //     name: 'age',
+  //     label: 'age',
+  //     placeholder: 24,
+  // },
+  // {
+  //     id: 'Dropdown1',
+  //     type: 'Dropdown',
+  //     name: 'gender',
+  //     options: [{
+  //         label: 'Male',
+  //         value: 'Male'
+  //     }],
+  //     placeholder: ''
+  // }
+];
+
+let uischema = [
+  {
+    type: "text",
+    name: "username",
+  },
+  {
+    type: "radio",
+    name: "username",
+  },
+  {
+    type: "select",
+    name: "gender",
+    options: [
+      {
+        label: "Male",
+        value: "Male",
+      },
+    ],
+  },
+];
+
+let lookupData = [
+  {
+    id: "text",
+    data: [],
+  },
+  {
+    type: "radio",
+    name: "username",
+  },
+  {
+    type: "select",
+    name: "gender",
+    options: [
+      {
+        label: "Male",
+        value: "Male",
+      },
+    ],
+  },
+];
+
 const controls = [
   { key: "Textbox", icon: "bi-fonts", description: "Text Input" },
   {
@@ -84,26 +161,35 @@ function createToolboxItem(control) {
 
   return rootElement;
 }
+// ############# DESIGNER FUNCTIONS
 
-function handleDrop(e) {
-  e.preventDefault();
-  var highlightedDropArea = e.target;
+function DropInDesignerHandler(event) {
+  const elementType = event.dataTransfer.getData("text/plain");
+
+  if (elementType == "Row") {
+  } else {
+    schema.push({
+      type: elementType,
+      id: Date.now().toString(),
+      name: elementType,
+      label: elementType,
+      placeholder: elementType,
+      required: false,
+      value: "",
+      options: [],
+      multiple: false,
+      accept: "",
+      class: "",
+    });
+  }
+}
+
+function handleDrop(event) {
+  event.preventDefault();
+  var highlightedDropArea = event.target;
   highlightedDropArea.classList.remove("highlight-dragover");
-  const elementType = e.dataTransfer.getData("text/plain");
 
-  schema.push({
-    type: elementType,
-    id: Date.now().toString(),
-    name: elementType,
-    label: elementType,
-    placeholder: elementType,
-    required: false,
-    value: "",
-    options: [],
-    multiple: false,
-    accept: "",
-    class: "",
-  });
+  DropInDesignerHandler(event);
 
   var form = new FormBuilder(schema);
   form.render("#designer");
@@ -127,86 +213,7 @@ function removeHighlight(event) {
 
 // # #######################################  END Left Toolbox
 
-// Schema
-let schema = [
-  // {
-  //     id: 'Textbox1',
-  //     type: 'Textbox',
-  //     name: 'username',
-  //     label: 'Username',
-  //     placeholder: 'Username'
-  // },
-  // {
-  //     id: 'Radio1',
-  //     type: 'Radio',
-  //     name: 'choose',
-  //     label: 'choose',
-  //     placeholder: 'choose',
-  // },
-  // {
-  //     id: 'Number1',
-  //     type: 'Number',
-  //     name: 'age',
-  //     label: 'age',
-  //     placeholder: 24,
-  // },
-  // {
-  //     id: 'Dropdown1',
-  //     type: 'Dropdown',
-  //     name: 'gender',
-  //     options: [{
-  //         label: 'Male',
-  //         value: 'Male'
-  //     }],
-  //     placeholder: ''
-  // }
-];
-
-let uischema = [
-  {
-    type: "text",
-    name: "username",
-  },
-  {
-    type: "radio",
-    name: "username",
-  },
-  {
-    type: "select",
-    name: "gender",
-    options: [
-      {
-        label: "Male",
-        value: "Male",
-      },
-    ],
-  },
-];
-
-let lookupData = [
-  {
-    id: "text",
-    data: [],
-  },
-  {
-    type: "radio",
-    name: "username",
-  },
-  {
-    type: "select",
-    name: "gender",
-    options: [
-      {
-        label: "Male",
-        value: "Male",
-      },
-    ],
-  },
-];
 // Usage
-init();
-const form = new FormBuilder(schema);
-form.render("#designer");
 
 function renderDesigner() {
   const designer = document.getElementById("designer");
@@ -224,13 +231,7 @@ function handleDragOver(e) {
   e.preventDefault(); // Prevent default behavior to enable drop
 }
 
-function init() {
-  renderToolbox();
-  renderDesigner();
-  renderJsonSchema();
-}
-
-// ############# PROPERTY WINDOW
+// # #######################################  PROPERTY WINDOW
 function createProperty(field) {
   switch (field.type) {
     case "Textbox":
@@ -249,6 +250,8 @@ function createProperty(field) {
     // etc for other field types
   }
 }
+
+function showLayoutProperties(elementType, controlId) {}
 
 function showControlProperties(elementType, controlId) {
   const index = schema.findIndex((obj) => obj.id === controlId);
@@ -406,7 +409,25 @@ function removeControl() {
   hideProperties();
   renderJsonSchema();
 }
+
+// # #######################################  JSON SCHEMA AREA
+
 function renderJsonSchema() {
-  const jsonSchemaDisplay = document.getElementById("json-schema-box-pre");
+  const jsonSchemaDisplay = document.getElementById("json-schema-box");
   jsonSchemaDisplay.innerHTML = JSON.stringify(schema, null, 4);
 }
+
+// RUN
+function RefreshForm() {
+  const form = new FormBuilder(schema);
+  form.render("#designer");
+}
+
+function init() {
+  renderToolbox();
+  renderDesigner();
+  renderJsonSchema();
+  RefreshForm();
+}
+
+init();
