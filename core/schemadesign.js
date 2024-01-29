@@ -1,6 +1,6 @@
 var uischema = {
   type: "TupleLayout",
-  rows: 3,
+  rows: 1 ,
   column: 3,
   elements: [
     {

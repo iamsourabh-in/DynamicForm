@@ -108,6 +108,7 @@ function handleDrop(e) {
   var form = new FormBuilder(schema);
   form.render("#designer");
   //createControlInDesigner(elementType, e);
+  renderJsonSchema();
 }
 
 function highlightDropArea(event) {
@@ -226,6 +227,7 @@ function handleDragOver(e) {
 function init() {
   renderToolbox();
   renderDesigner();
+  renderJsonSchema();
 }
 
 // ############# PROPERTY WINDOW
@@ -366,6 +368,7 @@ function updateControlProperties() {
     class: cssClass,
   });
   hideProperties();
+  renderJsonSchema();
 }
 
 function updateSchemaInfo(schema, id, update) {
@@ -401,4 +404,9 @@ function removeControl() {
 
   // Clear the properties section
   hideProperties();
+  renderJsonSchema();
+}
+function renderJsonSchema() {
+  const jsonSchemaDisplay = document.getElementById("json-schema-box-pre");
+  jsonSchemaDisplay.innerHTML = JSON.stringify(schema, null, 4);
 }
