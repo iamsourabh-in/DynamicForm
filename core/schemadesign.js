@@ -1,14 +1,8 @@
 var uischema = {
-  type: "TupleLayout",
-  rows: 1 ,
-  column: 3,
+  type: "Row",
   elements: [
     {
-      type: "Control",
-      scope: "properties.rating",
-    },
-    {
-      type: "VerticalLayout",
+      type: "Row",
       elements: [
         {
           type: "Control",
