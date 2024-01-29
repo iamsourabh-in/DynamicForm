@@ -203,7 +203,9 @@ class FormBuilder {
       });
 
       return row;
+
     } else {
+      
       // Render control
       return createControl(layout);
     }

@@ -167,6 +167,7 @@ function DropInDesignerHandler(event) {
   const elementType = event.dataTransfer.getData("text/plain");
 
   if (elementType == "Row") {
+
   } else {
     schema.push({
       type: elementType,
@@ -200,7 +201,9 @@ function handleDrop(event) {
 function highlightDropArea(event) {
   console.log(event);
   var highlightedDropArea = event.target;
-  highlightedDropArea.classList.add("highlight-dragover");
+  if (event.target.classList.contains("form-group") || event.target.classList.contains("form-control")) { } else {
+    highlightedDropArea.classList.add("highlight-dragover");
+  }
   // Check if the dragged item is a control
 }
 
@@ -215,43 +218,33 @@ function removeHighlight(event) {
 
 // Usage
 
-function renderDesigner() {
-  const designer = document.getElementById("designer");
-  designer.innerHTML = "";
-
-  // Set the designer container to flex with column layout
-  designer.style.display = "flex";
-  designer.style.flexDirection = "column";
-
-  designer.addEventListener("dragover", handleDragOver);
-  designer.addEventListener("drop", handleDrop);
-}
-
 function handleDragOver(e) {
   e.preventDefault(); // Prevent default behavior to enable drop
 }
 
+
+
 // # #######################################  PROPERTY WINDOW
-function createProperty(field) {
-  switch (field.type) {
-    case "Textbox":
-      return this.createTextBox(field);
-    case "Dropdown":
-      return this.createSelect(field);
-    case "Number":
-      return this.createNumber(field);
-    case "Radio":
-      return this.createRadio(field);
-    case "Column":
-      return this.createLayout(2, 2);
-    case "Row":
-      return this.renderLayout();
+// function createProperty(field) {
+//   switch (field.type) {
+//     case "Textbox":
+//       return this.createTextBox(field);
+//     case "Dropdown":
+//       return this.createSelect(field);
+//     case "Number":
+//       return this.createNumber(field);
+//     case "Radio":
+//       return this.createRadio(field);
+//     case "Column":
+//       return this.createLayout(2, 2);
+//     case "Row":
+//       return this.renderLayout();
 
-    // etc for other field types
-  }
-}
+//     // etc for other field types
+//   }
+// }
 
-function showLayoutProperties(elementType, controlId) {}
+function showLayoutProperties(elementType, controlId) { }
 
 function showControlProperties(elementType, controlId) {
   const index = schema.findIndex((obj) => obj.id === controlId);
@@ -423,9 +416,21 @@ function RefreshForm() {
   form.render("#designer");
 }
 
+function setupDesigner() {
+  const designer = document.getElementById("designer");
+  designer.innerHTML = "";
+
+  // Set the designer container to flex with column layout
+  // designer.style.display = "flex";
+  // designer.style.flexDirection = "column";
+
+  designer.addEventListener("dragover", handleDragOver);
+  designer.addEventListener("drop", handleDrop);
+}
+
 function init() {
   renderToolbox();
-  renderDesigner();
+  setupDesigner();
   renderJsonSchema();
   RefreshForm();
 }

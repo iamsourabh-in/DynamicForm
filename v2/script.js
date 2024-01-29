@@ -437,7 +437,7 @@ function renderJsonSchema() {
     jsonSchemaDisplay.innerHTML = JSON.stringify(jsonSchema, null, 2);
 }
 
-function renderDesigner() {
+function setupDesigner() {
     const designer = document.getElementById('designer');
     designer.innerHTML = '';
 
@@ -455,7 +455,7 @@ function handleDragOver(e) {
 
 function init() {
     renderToolbox();
-    renderDesigner();
+    setupDesigner();
     renderJsonSchema();
 }
 
