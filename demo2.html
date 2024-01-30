@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Signup Form</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" />
+</head>
+
+<body>
+
+    <script>
+        const schema = {
+            "form": {
+                "method": "POST",
+                "type": "layout",
+                "rows": [
+                    {
+                        "type": "row",
+                        "columns": [
+                            {
+                                "width": 6,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "username"
+                                    }
+                                ]
+                            },
+                            {
+                                "width": 6,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "email"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "row",
+                        "columns": [
+                            {
+                                "width": 6,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "password"
+                                    }
+                                ]
+                            },
+                            {
+                                "width": 6,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "confirmPassword"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "row",
+                        "columns": [
+                            {
+                                "width": 6,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "age"
+                                    }
+                                ]
+                            },
+                            {
+                                "width": 6,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "country"
+                                    }
+                                ]
+                            }
+                        ]
+                    },
+                    {
+                        "type": "row",
+                        "columns": [
+                            {
+                                "width": 12,
+                                "controls": [
+                                    {
+                                        "type": "control",
+                                        "controlId": "submitButton"
+                                    }
+                                ]
+                            }
+                        ]
+                    }
+                ]
+            },
+            "controlSchema": {
+                "username": {
+                    "type": "control",
+                    "controlType": "textbox",
+                    "label": "Username",
+                    "id": "username",
+                    "name": "username",
+                    "placeholder": "Enter username",
+                    "required": true,
+                    "class": "form-control",
+                    "validation": [
+                        {
+                            "type": "pattern",
+                            "pattern": "^[a-zA-Z0-9_]+$",
+                            "errorMessage": "Username must contain only letters, numbers, and underscores."
+                        },
+                        {
+                            "type": "compare",
+                            "pattern": ["!=", "#password"],
+                            "errorMessage": "Username must not be the same as the password."
+                        }
+                    ]
+                },
+                "email": {
+                    "type": "control",
+                    "controlType": "textbox",
+                    "label": "Email",
+                    "id": "email",
+                    "name": "email",
+                    "placeholder": "Enter email",
+                    "required": true,
+                    "class": "form-control",
+                    "validation": [
+                        {
+                            "type": "pattern",
+                            "pattern": "^\\S+@\\S+\\.\\S+$",
+                            "errorMessage": "Invalid email format."
+                        }
+                    ]
+                },
+                "password": {
+                    "type": "control",
+                    "controlType": "password",
+                    "label": "Password",
+                    "id": "password",
+                    "placeholder": "Enter password",
+                    "required": true,
+                    "class": "form-control",
+                    "validation": [
+                        {
+                            "type": "minLength",
+                            "minLength": 8,
+                            "errorMessage": "Password must be at least 8 characters long."
+                        }
+                    ]
+                },
+                "confirmPassword": {
+                    "type": "control",
+                    "controlType": "password",
+                    "label": "Confirm Password",
+                    "id": "confirmPassword",
+                    "name": "confirm-password",
+                    "placeholder": "Confirm password",
+                    "required": true,
+                    "class": "form-control",
+                    "validation": [
+                        {
+                            "type": "minLength",
+                            "minLength": 8,
+                            "errorMessage": "Password must be at least 8 characters long."
+                        },
+                        {
+                            "type": "equalTo",
+                            "equalTo": "#password",
+                            "errorMessage": "Passwords do not match."
+                        }
+                    ]
+                },
+                "age": {
+                    "type": "control",
+                    "controlType": "number",
+                    "label": "Age",
+                    "id": "age",
+                    "name": "age",
+                    "placeholder": "Enter age",
+                    "required": true,
+                    "class": "form-control",
+                    "validation": [
+                        {
+                            "type": "range",
+                            "min": 18,
+                            "max": 100,
+                            "errorMessage": "Age must be between 18 and 100."
+                        }
+                    ]
+                },
+                "country": {
+                    "type": "control",
+                    "controlType": "select",
+                    "label": "Country",
+                    "id": "country",
+                    "name": "country",
+                    "lookup": true,
+                    "lookupKey": "countries",
+                    "required": true,
+                    "class": "form-control"
+                },
+                "submitButton": {
+                    "type": "control",
+                    "controlType": "button",
+                    "buttonType": "submit",
+                    "label": "Sign Up",
+                    "id": "submitButton",
+                    "class": "btn btn-primary"
+                }
+            },
+            "lookupSchema": {
+                "countries": {
+                    "values": [
+                        {
+                            "name": "USA",
+                            "cities": ["New York", "Los Angeles", "Chicago"]
+                        },
+                        {
+                            "name": "Canada",
+                            "cities": ["Toronto", "Vancouver", "Montreal"]
+                        }
+                        // ... other countries
+                    ],
+                    "nested": true
+                },
+                "ageRanges": {
+                    "values": ["0-18", "19-30", "31-50", "51+"],
+                    "nested": false
+                }
+            }
+        }
+
+
+
+        // Function to create a control element
+        function createControl(controlId) {
+            const controlData = schema.controlSchema[controlId];
+
+            const container = document.createElement('div');
+            container.className = 'form-group';
+
+            const label = document.createElement('label');
+            label.setAttribute('for', controlData.id);
+            label.textContent = controlData.label;
+
+            const control = controlData.controlType === 'select' ?
+                createSelectControl(controlData) :
+                createInputControl(controlData);
+
+            container.appendChild(label);
+            container.appendChild(control);
+
+            return container;
+        }
+
+        // Function to create an input control element
+        function createInputControl(controlData) {
+            const input = document.createElement('input');
+            input.type = controlData.controlType;
+            input.id = controlData.id;
+            input.name = controlData.name;
+            input.placeholder = controlData.placeholder;
+            input.className = controlData.class;
+            if (controlData.required) input.setAttribute('required', 'true');
+
+            return input;
+        }
+
+        // Function to create a select control element
+        function createSelectControl(controlData) {
+            const select = document.createElement('select');
+            select.id = controlData.id;
+            select.name = controlData.name;
+            select.className = controlData.class;
+            if (controlData.required) select.setAttribute('required', 'true');
+
+            if (controlData.lookup) {
+                const lookupData = schema.lookupSchema[controlData.lookupKey];
+                lookupData.values.forEach(value => {
+                    const option = document.createElement('option');
+                    option.value = value.name;
+                    option.textContent = value.name;
+                    select.appendChild(option);
+                });
+            } else {
+                controlData.options.forEach(option => {
+                    const optionElement = document.createElement('option');
+                    optionElement.value = option;
+                    optionElement.textContent = option;
+                    select.appendChild(optionElement);
+                });
+            }
+
+            return select;
+        }
+
+        // Function to create a column element
+        function createColumn(column) {
+            const columnElement = document.createElement('div');
+            columnElement.className = 'col-md-6';
+
+            column.controls.forEach(control => {
+                const controlElement = createControl(control.controlId
+                );
+                columnElement.appendChild(controlElement);
+            });
+
+            return columnElement;
+        }
+
+        // Function to create a row element
+        function createRow(row) {
+            const rowElement = document.createElement('div');
+            rowElement.className = 'row';
+
+            row.columns.forEach(column => {
+                const columnElement = createColumn(column);
+                rowElement.appendChild(columnElement);
+            });
+
+            return rowElement;
+        }
+
+        // Function to create the entire form
+        function createForm(form) {
+            const formElement = document.createElement('div');
+            formElement.innerHTML = form.rows.map(row => createRow(row).outerHTML).join('');
+            return formElement;
+        }
+
+        // Render the HTML to the body
+        document.body.appendChild(createForm(schema.form));
+
+    </script>
+
+</body>
+
+</html>

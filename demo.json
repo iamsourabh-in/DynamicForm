@@ -1,0 +1,229 @@
+{
+    "form": {
+      "method": "POST",
+      "type": "layout",
+      "rows": [
+        {
+          "type": "row",
+          "columns": [
+            {
+              "width": 6,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "username"
+                }
+              ]
+            },
+            {
+              "width": 6,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "email"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "columns": [
+            {
+              "width": 6,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "password"
+                }
+              ]
+            },
+            {
+              "width": 6,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "confirmPassword"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "columns": [
+            {
+              "width": 6,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "age"
+                }
+              ]
+            },
+            {
+              "width": 6,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "country"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "type": "row",
+          "columns": [
+            {
+              "width": 12,
+              "controls": [
+                {
+                  "type": "control",
+                  "controlId": "submitButton"
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "controlSchema": {
+      "username": {
+        "type": "control",
+        "controlType": "textbox",
+        "label": "Username",
+        "id": "username",
+        "name": "username",
+        "placeholder": "Enter username",
+        "required": true,
+        "class": "form-control",
+        "validation": [
+          {
+            "type": "pattern",
+            "pattern": "^[a-zA-Z0-9_]+$",
+            "errorMessage": "Username must contain only letters, numbers, and underscores."
+          },
+          {
+            "type": "compare",
+            "pattern": ["==", "#password"],
+            "errorMessage": "Username must not be the same as the password."
+          }
+        ]
+      },
+      "email": {
+        "type": "control",
+        "controlType": "textbox",
+        "label": "Email",
+        "id": "email",
+        "name": "email",
+        "placeholder": "Enter email",
+        "required": true,
+        "class": "form-control",
+        "validation": [
+          {
+            "type": "pattern",
+            "pattern": "^\\S+@\\S+\\.\\S+$",
+            "errorMessage": "Invalid email format."
+          }
+        ]
+      },
+      "password": {
+        "type": "control",
+        "controlType": "password",
+        "label": "Password",
+        "id": "password",
+        "name": "password",
+        "placeholder": "Enter password",
+        "required": true,
+        "class": "form-control",
+        "validation": [
+          {
+            "type": "minLength",
+            "minLength": 8,
+            "errorMessage": "Password must be at least 8 characters long."
+          }
+        ]
+      },
+      "confirmPassword": {
+        "type": "control",
+        "controlType": "password",
+        "label": "Confirm Password",
+        "id": "confirmPassword",
+        "name": "confirm-password",
+        "placeholder": "Confirm password",
+        "required": true,
+        "class": "form-control",
+        "validation": [
+          {
+            "type": "minLength",
+            "minLength": 8,
+            "errorMessage": "Password must be at least 8 characters long."
+          },
+          {
+            "type": "equalTo",
+            "equalTo": "#password",
+            "errorMessage": "Passwords do not match."
+          }
+        ]
+      },
+      "age": {
+        "type": "control",
+        "controlType": "number",
+        "label": "Age",
+        "id": "age",
+        "name": "age",
+        "placeholder": "Enter age",
+        "required": true,
+        "class": "form-control",
+        "validation": [
+          {
+            "type": "range",
+            "min": 18,
+            "max": 100,
+            "errorMessage": "Age must be between 18 and 100."
+          }
+        ]
+      },
+      "country": {
+        "type": "control",
+        "controlType": "select",
+        "label": "Country",
+        "id": "country",
+        "name": "country",
+        "lookup": true,
+        "lookupKey": "countries",
+        "required": true,
+        "class": "form-control"
+      },
+      "submitButton": {
+        "type": "control",
+        "controlType": "button",
+        "buttonType": "submit",
+        "label": "Sign Up",
+        "id": "submitButton",
+        "class": "btn btn-primary"
+      }
+    },
+    "lookupSchema": {
+      "countries": {
+        "values": [
+          {
+            "name": "USA",
+            "cities": ["New York", "Los Angeles", "Chicago"]
+          },
+          {
+            "name": "Canada",
+            "cities": ["Toronto", "Vancouver", "Montreal"]
+          }
+          // ... other countries
+        ],
+        "nested": true
+      },
+      "ageRanges": {
+        "values": ["0-18", "19-30", "31-50", "51+"],
+        "nested": false
+      }
+    }
+  }
+  

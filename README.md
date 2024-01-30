@@ -27,47 +27,50 @@
 
 ```json
 {
-  "type": "layout",
-  "rows": [
-    {
-      "type": "row",
-      "columns": [
-        {
-          "width": 4,
-          "className": "left-aligned",
-          "controls": [
-            {
-              "type": "control",
-              "controlId": "171230812368"
-            }
-          ]
-        },
-        {
-          "width": 4,
-          "className": "right-aligned",
-          "controls": [
-            {
-              "type": "control",
-              "controlId": "textControl2"
-            }
-          ]
-        },
-        {
-          "width": 4,
-          "controls": [
-            {
-              "type": "control",
-              "controlId": "selectControl"
-            },
-            {
-              "type": "control",
-              "controlId": "tableControl"
-            }
-          ]
-        }
-      ]
-    }
-  ]
+  "form": {
+    "method": "GET",
+    "type": "layout",
+    "rows": [
+      {
+        "type": "row",
+        "columns": [
+          {
+            "width": 4,
+            "className": "left-aligned",
+            "controls": [
+              {
+                "type": "control",
+                "controlId": "171230812368"
+              }
+            ]
+          },
+          {
+            "width": 4,
+            "className": "right-aligned",
+            "controls": [
+              {
+                "type": "control",
+                "controlId": "textControl2"
+              }
+            ]
+          },
+          {
+            "width": 4,
+            "controls": [
+              {
+                "type": "control",
+                "controlId": "selectControl"
+              },
+              {
+                "type": "control",
+                "controlId": "tableControl"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
 }
 ```
 
@@ -161,8 +164,6 @@ if (lookups[control.lookupKey]) {
               });
             }
 ```
-
-
 
 # ONE IN ALL:
 

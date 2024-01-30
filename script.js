@@ -35,46 +35,11 @@ let schema = [
 ];
 
 const uiSchema = {
+  method: "POST",
+  action: "http://localhost:8080/api/v1/form",
   type: "layout",
   rows: [
-    {
-      type: "row",
-      columns: [
-        {
-          width: 4,
-          className: "left-aligned",
-          controls: [
-            {
-              type: "control",
-              controlId: "textControl1",
-            },
-          ],
-        },
-        {
-          width: 4,
-          className: "right-aligned",
-          controls: [
-            {
-              type: "control",
-              controlId: "textControl2",
-            }
-          ],
-        },
-        {
-          width: 4,
-          controls: [
-            {
-              type: "control",
-              controlId: "selectControl",
-            },
-            {
-              type: "control",
-              controlId: "tableControl",
-            },
-          ],
-        },
-      ],
-    },
+
   ],
 };
 
@@ -106,6 +71,7 @@ function DropInDesignerHandler(event) {
   const elementType = event.dataTransfer.getData("type");
   const element = event.dataTransfer.getData("text/plain");
   if (elementType == "layout") {
+    //uiSchema.rows.push(createLayoutSchemaForDrop(element));
     schema.push(createLayoutSchemaForDrop(element));
   } else {
     schema.push(createSchemaForDrop(element));
@@ -150,6 +116,12 @@ function renderJsonSchema() {
   const jsonSchemaDisplay = document.getElementById("json-schema-box");
   jsonSchemaDisplay.innerHTML = JSON.stringify(schema, null, 4);
 }
+
+function renderUIJsonSchema() {
+  const jsonSchemaDisplay = document.getElementById("json-schema-box");
+  jsonSchemaDisplay.innerHTML += JSON.stringify(uiSchema, null, 4);
+}
+
 
 // RUN
 function RefreshForm() {

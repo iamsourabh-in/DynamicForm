@@ -111,13 +111,30 @@ function createLabelSchema(element) {
     };
 }
 
-function createLayoutSchema(element) {
+function createLayoutSchema(columns) {
     return {
-        type: element + "Column",
+        type: columns + "Column",
         id: Date.now().toString(),
-        name: element + "Column",
-        label: element + "Column",
-        length: element,
+        name: columns + "Column",
+        label: columns + "Column",
+        width: columns,
     };
 }
 
+function createLayoutSchemaNew(columns) {
+    const objects = [];
+    for (let i = 0; i < columns; i++) {
+        const object = createObject(i + 4, `aligned`, []);
+        objects.push(object);
+    }
+    return objects;
+}
+
+
+function createObject(width, className, controls) {
+    return {
+        width: width,
+        className: className,
+        controls: controls
+    };
+}

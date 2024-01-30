@@ -25,7 +25,7 @@ const controls = [
   { key: "2Column", icon: "bi-dice-2", description: "Two Column", type: "layout" },
   { key: "3Column", icon: "bi-dice-3", description: "Three Column", type: "layout" },
   { key: "4Column", icon: "bi-dice-4", description: "Four Column", type: "layout" },
-  { key: "5Column", icon: "bi-dice-5", description: "Five Column", type: "layout" },
+  // { key: "5Column", icon: "bi-dice-5", description: "Five Column", type: "layout" },
   { key: "6Column", icon: "bi-dice-6", description: "Six Column", type: "layout" },
   { key: "Iframe", icon: "bi-bounding-box", description: "Dynamic Form", type: "form" },
 ];

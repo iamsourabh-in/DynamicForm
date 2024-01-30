@@ -176,7 +176,7 @@ class FormBuilder {
   // Create rows and cols
   createLayout(field) {
     let rows = 1;
-    let cols = field.length;
+    let cols = field.width;
     // Outer container
     const container = document.createElement("div");
     //container.classList.add("container");
