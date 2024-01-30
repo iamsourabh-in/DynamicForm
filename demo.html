@@ -1,248 +1,283 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dynamic UI Renderer</title>
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+    />
     <style>
-        /* Add your custom styles here */
+      /* Add your custom styles here */
     </style>
-</head>
+  </head>
 
-<body>
-
+  <body>
     <div id="dynamicUIContainer" class="container mt-5">
-        <!-- Dynamic UI will be appended here -->
+      <!-- Dynamic UI will be appended here -->
     </div>
 
     <script>
-        // Define the UI schema and control schema
-        const uiSchema = {
-            "type": "layout",
-            "rows": [
-                {
-                    "type": "row",
-                    "columns": [
-                        {
-                            "type": "column",
-                            "width": 12,
-                            "content": [
-                                {
-                                    "type": "control",
-                                    "controlId": "textControl1"
-                                },
-                                {
-                                    "type": "row",
-                                    "columns": [
-                                        {
-                                            "type": "column",
-                                            "width": 12,
-                                            "content": [
-                                                {
-                                                    "type": "control",
-                                                    "controlId": "textControl2"
-                                                },
-                                                {
-                                                    "type": "control",
-                                                    "controlId": "numberControl2"
-                                                }
-                                            ]
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "column",
-                            "width": 12,
-                            "content": [
-                                // Additional controls or nested layouts can be added here
-                            ]
-                        }
-                    ]
-                }
-            ]
-        };
+      // Define the UI schema and control schema
+      const uiSchema = {
+        type: "layout",
+        rows: [
+          {
+            type: "row",
+            columns: [
+              {
+                type: "column",
+                content: [
+                  {
+                    width: 6,
+                    type: "control",
+                    controlId: "textControl1",
+                  },
+                  {
+                    width: 12,
+                    type: "row",
+                    columns: [
+                      {
+                        type: "column",
+                        content: [
+                          {
+                            width: 4,
+                            type: "control",
+                            controlId: "textControl2",
+                            align: "left",
+                          },
+                          {
+                            width: 4,
+                            type: "control",
+                            controlId: "numberControl2",
+                            align: "left",
+                          },
+                          {
+                            width: 4,
+                            type: "control",
+                            controlId: "numberControl2",
+                            align: "right",
+                          },
+                        ],
+                      },
+                    ],
+                  },
+                ],
+              },
+              {
+                type: "column",
+                content: [
+                  {
+                    width: 6,
+                    type: "control",
+                    controlId: "numberControl3",
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      };
 
-        const controlSchema = {
-            "textControl1": {
-                "type": "control",
-                "controlType": "textbox",
-                "label": "Text Input 1",
-                "id": "textInput1",
-                "name": "text-input-1",
-                "placeholder": "Enter text",
-                "required": true,
-                "validation": [{
-                    "type": 'pattern',
-                    "pattern": /^[a-zA-Z0-9_]+$/,
-                    "errorMessage": 'Username must contain only letters, numbers, and underscores.',
-                },
-                {
-                    "type": 'compare',
-                    "pattern": [],
-                    "errorMessage": 'Username must contain only letters, numbers, and underscores.',
-                }]
+      const controlSchema = {
+        textControl1: {
+          type: "control",
+          controlType: "textbox",
+          label: "Text Input 1",
+          id: "textInput1",
+          name: "text-input-1",
+          placeholder: "Enter text",
+          required: true,
+          validation: true,
+        },
+        textControl2: {
+          type: "control",
+          controlType: "textbox",
+          label: "Text Input 2",
+          id: "textInput2",
+          name: "text-input-2",
+          placeholder: "Enter text",
+          required: true,
+        },
+        numberControl2: {
+          type: "control",
+          controlType: "number",
+          label: "Number Input 2",
+          id: "numberInput2",
+          name: "number-input-2",
+          placeholder: "Enter number",
+          min: 0,
+          max: 100,
+          step: 1,
+          required: true,
+          defaultValue: 50,
+        },
+        numberControl3: {
+          type: "control",
+          controlType: "number",
+          label: "Number Input 2",
+          id: "numberInput2",
+          name: "number-input-2",
+          placeholder: "Enter number",
+          min: 0,
+          max: 100,
+          step: 1,
+          required: true,
+          defaultValue: 50,
+          validation: [
+            ["input.col.id", "==", "tsesting"],
+            ["input.col.value", "==", "tsesting"],
+          ],
+          conditions: [
+            {
+              input: "control2",
+              action: "Hide",
+              match: ["input.col.id", "==", "tsesting"],
             },
-            "textControl2": {
-                "type": "control",
-                "controlType": "textbox",
-                "label": "Text Input 2",
-                "id": "textInput2",
-                "name": "text-input-2",
-                "placeholder": "Enter text",
-                "required": true
-            },
-            "numberControl2": {
-                "type": "control",
-                "controlType": "number",
-                "label": "Number Input 2",
-                "id": "numberInput2",
-                "name": "number-input-2",
-                "placeholder": "Enter number",
-                "min": 0,
-                "max": 100,
-                "step": 1,
-                "required": true,
-                "defaultValue": 50
-            }
-        };
+          ],
+        },
+      };
 
-        // Render the UI schema
-        renderDynamicUI(uiSchema, controlSchema, 'dynamicUIContainer');
+      // Render the UI schema
+      renderDynamicUI(uiSchema, controlSchema, "dynamicUIContainer");
 
-        function renderDynamicUI(uiSchema, controlSchema, containerId) {
-            const dynamicUIContainer = document.getElementById(containerId);
-            dynamicUIContainer.innerHTML = ''; // Clear previous content
+      function renderDynamicUI(uiSchema, controlSchema, containerId) {
+        const dynamicUIContainer = document.getElementById(containerId);
+        dynamicUIContainer.innerHTML = ""; // Clear previous content
 
-            uiSchema.rows.forEach(row => {
-                const rowElement = document.createElement('div');
-                rowElement.className = 'row';
+        uiSchema.rows.forEach((row) => {
+          const rowElement = document.createElement("div");
+          rowElement.className = "row";
 
-                row.columns.forEach(column => {
-                    const columnElement = document.createElement('div');
-                    const colWidth = column.width ? `col-md-${column.width}` : 'col-md'; // Default to equal width
-                    columnElement.className = colWidth;
+          row.columns.forEach((column) => {
+            column.content.forEach((content) => {
+              const columnElement = document.createElement("div");
+              columnElement.id = Date.now().toString();
+              const colWidth = content.width
+                ? `col-md-${content.width}`
+                : "col-md"; // Default to equal width
+              columnElement.className = colWidth;
+              if (content.type === "control") {
+                const controlId = content.controlId;
+                const currentControlSchema = controlSchema[controlId];
 
-                    column.content.forEach(content => {
-                        if (content.type === 'control') {
-                            const controlId = content.controlId;
-                            const currentControlSchema = controlSchema[controlId];
-
-                            if (currentControlSchema) {
-                                const controlElement = renderControl(currentControlSchema);
-                                columnElement.appendChild(controlElement);
-                            }
-                        } else if (content.type === 'row') {
-                            // Handle nested rows recursively
-                            const nestedRowElement = renderRow(content, controlSchema);
-                            columnElement.appendChild(nestedRowElement);
-                        }
-                    });
-
-                    rowElement.appendChild(columnElement);
-                });
-
-                dynamicUIContainer.appendChild(rowElement);
-            });
-        }
-
-        function renderRow(row, controlSchema) {
-            const nestedRowElement = document.createElement('div');
-            nestedRowElement.className = 'row';
-
-            row.columns.forEach(column => {
-                const nestedColumnElement = document.createElement('div');
-                const colWidth = column.width ? `col-md-${column.width}` : 'col-md'; // Default to equal width
-                nestedColumnElement.className = colWidth;
-
-                column.content.forEach(content => {
-                    if (content.type === 'control') {
-                        const controlId = content.controlId;
-                        const currentControlSchema = controlSchema[controlId];
-
-                        if (currentControlSchema) {
-                            const controlElement = renderControl(currentControlSchema);
-                            nestedColumnElement.appendChild(controlElement);
-                        }
-                    } else if (content.type === 'row') {
-                        // Handle nested rows recursively
-                        const nestedNestedRowElement = renderRow(content, controlSchema);
-                        nestedColumnElement.appendChild(nestedNestedRowElement);
-                    }
-                });
-
-                nestedRowElement.appendChild(nestedColumnElement);
-            });
-
-            return nestedRowElement;
-        }
-
-        function renderControl(controlSchema) {
-            const controlElement = document.createElement('div');
-            controlElement.className = 'form-group';
-
-            if (controlSchema.label) {
-                const labelElement = document.createElement('label');
-                labelElement.textContent = controlSchema.label;
-                controlElement.appendChild(labelElement);
-            }
-
-            if (controlSchema.controlType === 'textbox' || controlSchema.controlType === 'number' || controlSchema.controlType === 'email') {
-                const inputElement = document.createElement('input');
-                inputElement.type = controlSchema.controlType;
-                inputElement.id = controlSchema.id;
-                inputElement.name = controlSchema.name;
-                inputElement.placeholder = controlSchema.placeholder;
-                inputElement.required = controlSchema.required;
-
-                // Additional attributes based on the control type
-                if (controlSchema.controlType === 'number') {
-                    inputElement.min = controlSchema.min;
-                    inputElement.max = controlSchema.max;
-                    inputElement.step = controlSchema.step;
-                    inputElement.value = controlSchema.defaultValue;
+                if (currentControlSchema) {
+                  const controlElement = renderControl(currentControlSchema);
+                  columnElement.appendChild(controlElement);
                 }
+              } else if (content.type === "row") {
+                // Handle nested rows recursively
+                const nestedRowElement = renderRow(content, controlSchema);
+                columnElement.appendChild(nestedRowElement);
+              }
+              rowElement.appendChild(columnElement);
+            });
+          });
 
-                controlElement.appendChild(inputElement);
-            } else if (controlSchema.controlType === 'dropdown') {
-                const selectElement = document.createElement('select');
-                selectElement.id = controlSchema.id;
-                selectElement.name = controlSchema.name;
-                selectElement.required = controlSchema.required;
+          dynamicUIContainer.appendChild(rowElement);
+        });
+      }
 
-                controlSchema.options.forEach(optionValue => {
-                    const optionElement = document.createElement('option');
-                    optionElement.value = optionValue;
-                    optionElement.textContent = optionValue;
-                    selectElement.appendChild(optionElement);
-                });
+      function renderRow(row, controlSchema) {
+        const nestedRowElement = document.createElement("div");
+        nestedRowElement.className = "row";
 
-                controlElement.appendChild(selectElement);
-            } else if (controlSchema.controlType === 'date') {
-                const inputElement = document.createElement('input');
-                inputElement.type = 'date';
-                inputElement.id = controlSchema.id;
-                inputElement.name = controlSchema.name;
-                inputElement.required = controlSchema.required;
+        row.columns.forEach((column) => {
+          column.content.forEach((content) => {
+            const nestedColumnElement = document.createElement("div");
+            nestedColumnElement.id = Date.now().toString();
+            const colWidth = content.width
+              ? `col-md-${content.width}`
+              : "col-md"; // Default to equal width
+            nestedColumnElement.className = colWidth;
+            if (content.type === "control") {
+              const controlId = content.controlId;
+              const currentControlSchema = controlSchema[controlId];
 
-                controlElement.appendChild(inputElement);
+              if (currentControlSchema) {
+                const controlElement = renderControl(currentControlSchema);
+                nestedColumnElement.appendChild(controlElement);
+              }
+            } else if (content.type === "row") {
+              // Handle nested rows recursively
+              const nestedNestedRowElement = renderRow(content, controlSchema);
+              nestedColumnElement.appendChild(nestedNestedRowElement);
             }
+            nestedRowElement.appendChild(nestedColumnElement);
+          });
+        });
 
-            // Add additional attributes or Bootstrap classes as needed
-            // For example, you can add Bootstrap classes for styling
+        return nestedRowElement;
+      }
 
-            return controlElement;
+      function renderControl(controlSchema) {
+        const controlElement = document.createElement("div");
+        controlElement.className = "form-group";
+
+        if (controlSchema.label) {
+          const labelElement = document.createElement("label");
+          labelElement.className = "form-control";
+          labelElement.textContent = controlSchema.label;
+          controlElement.appendChild(labelElement);
         }
+
+        if (
+          controlSchema.controlType === "textbox" ||
+          controlSchema.controlType === "number" ||
+          controlSchema.controlType === "email"
+        ) {
+          const inputElement = document.createElement("input");
+          inputElement.type = controlSchema.controlType;
+          inputElement.id = controlSchema.id;
+          inputElement.name = controlSchema.name;
+          inputElement.placeholder = controlSchema.placeholder;
+          inputElement.required = controlSchema.required;
+
+          // Additional attributes based on the control type
+          if (controlSchema.controlType === "number") {
+            inputElement.min = controlSchema.min;
+            inputElement.max = controlSchema.max;
+            inputElement.step = controlSchema.step;
+            inputElement.value = controlSchema.defaultValue;
+          }
+
+          controlElement.appendChild(inputElement);
+        } else if (controlSchema.controlType === "dropdown") {
+          const selectElement = document.createElement("select");
+          selectElement.id = controlSchema.id;
+          selectElement.name = controlSchema.name;
+          selectElement.required = controlSchema.required;
+
+          controlSchema.options.forEach((optionValue) => {
+            const optionElement = document.createElement("option");
+            optionElement.value = optionValue;
+            optionElement.textContent = optionValue;
+            selectElement.appendChild(optionElement);
+          });
+
+          controlElement.appendChild(selectElement);
+        } else if (controlSchema.controlType === "date") {
+          const inputElement = document.createElement("input");
+          inputElement.type = "date";
+          inputElement.id = controlSchema.id;
+          inputElement.name = controlSchema.name;
+          inputElement.required = controlSchema.required;
+
+          controlElement.appendChild(inputElement);
+        }
+
+        // Add additional attributes or Bootstrap classes as needed
+        // For example, you can add Bootstrap classes for styling
+
+        return controlElement;
+      }
     </script>
 
     <!-- Bootstrap JS and Popper.js -->
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-</body>
-
+  </body>
 </html>
