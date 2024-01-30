@@ -57,7 +57,7 @@ class FormBuilder {
     wrapper.name = field.name;
     wrapper.addEventListener("click", () => {
       selectedControl = wrapper;
-      showControlProperties(input, field.id);
+      showControlProperties(field.id);
     });
 
     wrapper.appendChild(label);
@@ -81,7 +81,7 @@ class FormBuilder {
     wrapper.name = field.name;
     wrapper.addEventListener("click", () => {
       selectedControl = wrapper;
-      showControlProperties(select, field.id);
+      showControlProperties(field.id);
     });
 
     field.options.forEach((option) => {
@@ -113,7 +113,7 @@ class FormBuilder {
     wrapper.name = field.name;
     wrapper.addEventListener("click", () => {
       selectedControl = wrapper;
-      showControlProperties(input, field.id);
+      showControlProperties(field.id);
     });
 
     wrapper.appendChild(label);
@@ -137,7 +137,7 @@ class FormBuilder {
 
     wrapper.addEventListener("click", () => {
       selectedControl = wrapper;
-      showControlProperties(input, field.id);
+      showControlProperties(field.id);
     });
 
     wrapper.name = field.name;
@@ -154,7 +154,7 @@ class FormBuilder {
     container.classList.add("container");
     container.addEventListener("click", () => {
       selectedControl = container;
-      showLayoutProperties(container, field.id);
+      showLayoutProperties(field.id);
     });
     for (let i = 0; i < rows; i++) {
       // Create row
