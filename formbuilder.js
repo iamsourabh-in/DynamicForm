@@ -31,10 +31,20 @@ class FormBuilder {
         return this.createNumber(field);
       case "Radio":
         return this.createRadio(field);
-      case "Column":
-        return this.createLayout(3, 3);
-      case "Row":
-        return this.renderLayout();
+      case "Label":
+        return this.createLabel(field);
+      case "2Column":
+        return this.createLayout(field);
+      case "3Column":
+        return this.createLayout(field);
+      case "4Column":
+        return this.createLayout(field);
+      case "5Column":
+        return this.createLayout(field);
+      case "6Column":
+        return this.createLayout(field);
+      case "1Column":
+        return this.createLayout(field);
 
       // etc for other field types
     }
@@ -147,29 +157,49 @@ class FormBuilder {
     return wrapper;
   }
 
+  createLabel(field) {
+    const wrapper = document.createElement("div");
+    const label = document.createElement("label");
+
+    label.innerHTML = field.label;
+
+    wrapper.addEventListener("click", () => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+    });
+
+    wrapper.name = field.name;
+    wrapper.appendChild(label);
+
+    return wrapper;
+  }
   // Create rows and cols
-  createLayout(rows, cols) {
+  createLayout(field) {
+    let rows = 1;
+    let cols = field.length;
     // Outer container
     const container = document.createElement("div");
-    container.classList.add("container");
+    //container.classList.add("container");
     container.addEventListener("click", () => {
       selectedControl = container;
       showLayoutProperties(field.id);
     });
-    for (let i = 0; i < rows; i++) {
+    for (let i = 0; i < 1; i++) {
       // Create row
       const row = document.createElement("div");
       row.classList.add("row");
-
+      row.id = field.id;
       for (let j = 0; j < cols; j++) {
         // Create column
         const col = document.createElement("div");
-
+        let colid = Math.floor(Math.random() * 1000);
+        col.id = Date.now().toString() + colid;
+        col.setAttribute("data-index", j);
         // Size column based on number of cols
-        col.classList.add("col-md-" + 12 / cols);
+        col.classList.add("col-md-" + Math.floor(12 / cols), "p-5", "dropzone");
 
         // Add styling
-        col.style.border = "1px solid";
+        col.style.border = "1px dashed #ccc";
         col.style.padding = "10px";
 
         row.appendChild(col);
@@ -180,58 +210,27 @@ class FormBuilder {
 
     return container;
   }
-  // Recursive function to render layout
-  renderLayout() {
-    var layout = {
-      type: "layout",
-      rows: [
-        {
-          cols: {
-            length: 4,
-            elements: [{ type: "textbox" }, { type: "textbox" }],
-          },
-        },
-      ],
-    };
-    if (layout.type === "layout") {
-      // Render layout rows
-      const row = document.createElement("div");
-      row.classList.add("row");
 
-      layout.rows.forEach((row) => {
-        this.renderRow(row, row);
+  renderLayout(layout) {
+    let result = '';
+
+    layout.rows.forEach(row => {
+      result += '<div class="row">';
+      row.columns.forEach(column => {
+        result += `<div class="col-${column.width} ${column.className || ''}">`;
+        if (column.controls) {
+          column.controls.forEach(control => {
+            const controlDetails = controls[control.controlId];
+            result += renderControl(controlDetails);
+          });
+        }
+        result += '</div>';
       });
-
-      return row;
-
-    } else {
-      
-      // Render control
-      return createControl(layout);
-    }
-  }
-
-  // Render row with columns
-  renderRow(row, parent) {
-    const rowEl = document.createElement("div");
-    rowEl.classList.add("row");
-    const cols = row.cols;
-    cols.elements.forEach((col) => {
-      const colEl = document.createElement("div");
-
-      // Size based on nested columns
-      colEl.classList.add("col-md-" + 12 / row.cols.length);
-
-      // Render column content
-      colEl.appendChild(this.renderLayout());
-
-      rowEl.appendChild(colEl);
+      result += '</div>';
     });
 
-    parent.appendChild(rowEl);
+    return result;
   }
-  // Usage
-
   // Other field creation methods
 
   getValue() {

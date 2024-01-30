@@ -1,4 +1,12 @@
-function showLayoutProperties(elementType, controlId) { }
+function showLayoutProperties(controlId) {
+  const index = schema.findIndex((obj) => obj.id === controlId);
+
+  const properties = document.getElementById("properties");
+  properties.innerHTML = "";
+  const propertiesHeader = document.createElement("h4");
+  propertiesHeader.innerText = `Properties for ${schema[index].name}`;
+  properties.appendChild(propertiesHeader);
+}
 
 function showControlProperties(controlId) {
   const index = schema.findIndex((obj) => obj.id === controlId);

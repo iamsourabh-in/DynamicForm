@@ -34,26 +34,49 @@ let schema = [
   // }
 ];
 
-let uischema = [
-  {
-    type: "text",
-    name: "username",
-  },
-  {
-    type: "radio",
-    name: "username",
-  },
-  {
-    type: "select",
-    name: "gender",
-    options: [
-      {
-        label: "Male",
-        value: "Male",
-      },
-    ],
-  },
-];
+const uiSchema = {
+  type: "layout",
+  rows: [
+    {
+      type: "row",
+      columns: [
+        {
+          width: 4,
+          className: "left-aligned",
+          controls: [
+            {
+              type: "control",
+              controlId: "textControl1",
+            },
+          ],
+        },
+        {
+          width: 4,
+          className: "right-aligned",
+          controls: [
+            {
+              type: "control",
+              controlId: "textControl2",
+            }
+          ],
+        },
+        {
+          width: 4,
+          controls: [
+            {
+              type: "control",
+              controlId: "selectControl",
+            },
+            {
+              type: "control",
+              controlId: "tableControl",
+            },
+          ],
+        },
+      ],
+    },
+  ],
+};
 
 let lookupData = [
   {
@@ -83,7 +106,7 @@ function DropInDesignerHandler(event) {
   const elementType = event.dataTransfer.getData("type");
   const element = event.dataTransfer.getData("text/plain");
   if (elementType == "layout") {
-
+    schema.push(createLayoutSchemaForDrop(element));
   } else {
     schema.push(createSchemaForDrop(element));
   }
@@ -102,9 +125,10 @@ function handleDrop(event) {
 }
 
 function highlightDropArea(event) {
-  console.log(event);
+
   var highlightedDropArea = event.target;
-  if (event.target.classList.contains("form-group") || event.target.classList.contains("form-control")) { } else {
+  if (!event.target.classList.contains("dropzone")) { } else {
+    console.log(event);
     highlightedDropArea.classList.add("highlight-dragover");
   }
   // Check if the dragged item is a control

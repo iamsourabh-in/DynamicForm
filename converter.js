@@ -8,14 +8,34 @@ function createSchemaForDrop(element) {
             return createNumberSchema(element);
         case "Radio":
             return createRadioSchema(element);
-        case "Column":
-            return createLayoutSchema(2, 2);
-        case "Row":
-            return renderLayoutSchema();
+        case "Label":
+            return createLabelSchema(element);
+
 
         // etc for other field types
     }
 }
+
+function createLayoutSchemaForDrop(element) {
+    switch (element) {
+
+        case "2Column":
+            return createLayoutSchema(2);
+        case "3Column":
+            return createLayoutSchema(3);
+        case "4Column":
+            return createLayoutSchema(4);
+        case "5Column":
+            return createLayoutSchema(5);
+        case "6Column":
+            return createLayoutSchema(6);
+        case "1Column":
+            return createLayoutSchema(1);
+
+        // etc for other field types
+    }
+}
+
 
 //
 function createTextBoxSchema(element) {
@@ -78,3 +98,26 @@ function createRadioSchema(element) {
         class: "",
     };
 }
+
+
+function createLabelSchema(element) {
+    return {
+        type: element,
+        id: Date.now().toString(),
+        name: element,
+        label: element,
+        accept: "",
+        class: "",
+    };
+}
+
+function createLayoutSchema(element) {
+    return {
+        type: element + "Column",
+        id: Date.now().toString(),
+        name: element + "Column",
+        label: element + "Column",
+        length: element,
+    };
+}
+

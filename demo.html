@@ -75,7 +75,17 @@
                 "id": "textInput1",
                 "name": "text-input-1",
                 "placeholder": "Enter text",
-                "required": true
+                "required": true,
+                "validation": [{
+                    "type": 'pattern',
+                    "pattern": /^[a-zA-Z0-9_]+$/,
+                    "errorMessage": 'Username must contain only letters, numbers, and underscores.',
+                },
+                {
+                    "type": 'compare',
+                    "pattern": [],
+                    "errorMessage": 'Username must contain only letters, numbers, and underscores.',
+                }]
             },
             "textControl2": {
                 "type": "control",
