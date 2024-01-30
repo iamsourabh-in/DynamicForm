@@ -99,7 +99,11 @@
                     "errorMessage": 'Username must contain only letters, numbers, and underscores.',
                 }],
                 "Conditions":[
-
+                    {
+                    ref: "#control2",
+                    action: "Hide",
+                    match: ["input.col.id", "==", "tsesting"],
+                    }
                 ]
             },
             "textControl2": {
