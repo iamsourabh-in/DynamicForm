@@ -1,46 +1,12 @@
 let selectedControl = null;
 // Schema
-let schema = [
-  // {
-  //     id: 'Textbox1',
-  //     type: 'Textbox',
-  //     name: 'username',
-  //     label: 'Username',
-  //     placeholder: 'Username'
-  // },
-  // {
-  //     id: 'Radio1',
-  //     type: 'Radio',
-  //     name: 'choose',
-  //     label: 'choose',
-  //     placeholder: 'choose',
-  // },
-  // {
-  //     id: 'Number1',
-  //     type: 'Number',
-  //     name: 'age',
-  //     label: 'age',
-  //     placeholder: 24,
-  // },
-  // {
-  //     id: 'Dropdown1',
-  //     type: 'Dropdown',
-  //     name: 'gender',
-  //     options: [{
-  //         label: 'Male',
-  //         value: 'Male'
-  //     }],
-  //     placeholder: ''
-  // }
-];
+let schema = [ { "type": "6Column", "id": "1706706044914", "name": "6Column", "label": "6Column", "width": 6 }, { "type": "2Column", "id": "1706706108232", "name": "2Column", "label": "2Column", "width": 2 }, { "type": "2Column", "id": "1706706109406", "name": "2Column", "label": "2Column", "width": 2 } ];
 
 const uiSchema = {
   method: "POST",
   action: "http://localhost:8080/api/v1/form",
   type: "layout",
-  rows: [
-
-  ],
+  rows: [],
 };
 
 let lookupData = [
@@ -63,7 +29,6 @@ let lookupData = [
     ],
   },
 ];
-
 
 // ############# DESIGNER FUNCTIONS
 
@@ -88,12 +53,13 @@ function handleDrop(event) {
   RefreshForm();
   //createControlInDesigner(elementType, e);
   renderJsonSchema();
+  renderUIJsonSchema();
 }
 
 function highlightDropArea(event) {
-
   var highlightedDropArea = event.target;
-  if (!event.target.classList.contains("dropzone")) { } else {
+  if (!event.target.classList.contains("dropzone")) {
+  } else {
     console.log(event);
     highlightedDropArea.classList.add("highlight-dragover");
   }
@@ -106,7 +72,6 @@ function removeHighlight(event) {
   highlightedDropArea.classList.remove("highlight-dragover");
   // Check if the dragged item is a control
 }
-
 
 function handleDragOver(e) {
   e.preventDefault(); // Prevent default behavior to enable drop
@@ -122,10 +87,9 @@ function renderUIJsonSchema() {
   jsonSchemaDisplay.innerHTML += JSON.stringify(uiSchema, null, 4);
 }
 
-
 // RUN
 function RefreshForm() {
-  const form = new FormBuilder(schema);
+  const form = new FormBuilder(uiSchema, schema);
   form.render("#designer");
 }
 

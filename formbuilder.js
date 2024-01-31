@@ -1,15 +1,23 @@
 class FormBuilder {
-  constructor(schema) {
+  constructor(uiSchema, schema) {
     this.schema = schema;
+    this.uiSchema = uiSchema;
   }
 
   render(container) {
     this.container = document.querySelector(container);
     this.container.innerHTML = "";
     this.form = document.createElement("form");
+    this.container.appendChild(this.form);
+    // if (this.uiSchema.rows.length > 0) {
+    //   this.uiSchema.rows.forEach((row) => {
+    //     row.columns.forEach((column) => {
+    //       const element = this.createField(column);
+    //       this.form.appendChild(element);
+    //     });
+    //   });
+    // } else
     if (schema != null && schema.length > 0) {
-      this.container.appendChild(this.form);
-
       this.schema.forEach((field) => {
         const element = this.createField(field);
         this.form.appendChild(element);
@@ -20,7 +28,7 @@ class FormBuilder {
         "<h1> Drag Elements from the Toolbar here...</h1>";
     }
   }
-
+  renderFull() {}
   createField(field) {
     switch (field.type) {
       case "Textbox":
@@ -44,6 +52,8 @@ class FormBuilder {
       case "6Column":
         return this.createLayout(field);
       case "1Column":
+        return this.createLayout(field);
+      case "Row":
         return this.createLayout(field);
 
       // etc for other field types
@@ -212,21 +222,21 @@ class FormBuilder {
   }
 
   renderLayout(layout) {
-    let result = '';
+    let result = "";
 
-    layout.rows.forEach(row => {
+    layout.rows.forEach((row) => {
       result += '<div class="row">';
-      row.columns.forEach(column => {
-        result += `<div class="col-${column.width} ${column.className || ''}">`;
+      row.columns.forEach((column) => {
+        result += `<div class="col-${column.width} ${column.className || ""}">`;
         if (column.controls) {
-          column.controls.forEach(control => {
+          column.controls.forEach((control) => {
             const controlDetails = controls[control.controlId];
             result += renderControl(controlDetails);
           });
         }
-        result += '</div>';
+        result += "</div>";
       });
-      result += '</div>';
+      result += "</div>";
     });
 
     return result;

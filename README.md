@@ -27,132 +27,241 @@
 
 ```json
 {
-  "form": {
-    "method": "GET",
-    "type": "layout",
-    "rows": [
-      {
-        "type": "row",
-        "columns": [
-          {
-            "width": 4,
-            "className": "left-aligned",
-            "controls": [
-              {
-                "type": "control",
-                "controlId": "171230812368"
-              }
-            ]
-          },
-          {
-            "width": 4,
-            "className": "right-aligned",
-            "controls": [
-              {
-                "type": "control",
-                "controlId": "textControl2"
-              }
-            ]
-          },
-          {
-            "width": 4,
-            "controls": [
-              {
-                "type": "control",
-                "controlId": "selectControl"
-              },
-              {
-                "type": "control",
-                "controlId": "tableControl"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  }
+  "method": "POST",
+  "action": "http://localhost:8080/api/v1/form",
+  "type": "form",
+  "rows": [
+    {
+      "type": "row",
+      "height": 10,
+      "columns": [
+        {
+          "width": 6,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "username"
+            }
+          ]
+        },
+        {
+          "width": 6,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "email"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "columns": [
+        {
+          "width": 6,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "password"
+            }
+          ]
+        },
+        {
+          "width": 6,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "confirmPassword"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "columns": [
+        {
+          "width": 6,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "age"
+            }
+          ]
+        },
+        {
+          "width": 6,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "country"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "type": "row",
+      "columns": [
+        {
+          "width": 12,
+          "controls": [
+            {
+              "type": "control",
+              "controlId": "submitButton"
+            }
+          ]
+        }
+      ]
+    }
+  ]
 }
 ```
 
 # Scehma
 
 ```json
- {
-            "textControl1": {
-                "type": "control",
-                "controlType": "textbox",
-                "label": "Text Input 1",
-                "id": "textInput1",
-                "name": "text-input-1",
-                "placeholder": "Enter text",
-                "required": true,
-                "validation": [{
-                    "type": 'pattern',
-                    "pattern": /^[a-zA-Z0-9_]+$/,
-                    "errorMessage": 'Username must contain only letters, numbers, and underscores.',
-                },
-                {
-                    "type": 'compare',
-                    "pattern": ["==", "#textControl1"],
-                    "errorMessage": 'Username must be equal',
-                },
-                {
-                    "type": 'compare',
-                    "pattern": ["==", "#textControl1"],
-                    "errorMessage": 'Username must contain only letters, numbers, and underscores.',
-                }],
-                "Conditions":[
-                    {
-                    ref: "#control2",
-                    action: "Hide",
-                    match: ["input.col.id", "==", "tsesting"],
-                    }
-                ]
-            },
-            "textControl2": {
-                "type": "control",
-                "controlType": "textbox",
-                "label": "Text Input 2",
-                "id": "textInput2",
-                "name": "text-input-2",
-                "placeholder": "Enter text",
-                "required": true
-            },
-            "numberControl2": {
-                "type": "control",
-                "controlType": "number",
-                "label": "Number Input 2",
-                "id": "numberInput2",
-                "name": "number-input-2",
-                "placeholder": "Enter number",
-                "min": 0,
-                "max": 100,
-                "step": 1,
-                "required": true,
-                "defaultValue": 50
-            },
-              "selectControl": {
-              "type": "control",
-              "controlType": "select",
-              "label": "Select Country",
-              "id": "selectCountry",
-              "name": "select-country",
-              "lookup": true,
-              "lookupKey": "countries",
-              "required": true
-            },
-              "selectControl1": {
-              "type": "control",
-              "controlType": "select",
-              "label": "Select cities",
-              "id": "selectCountry",
-              "name": "select-country",
-              "lookup": false,
-              "options": [""],
-              "required": true
-        }
- }
-
+{
+  "username": {
+    "type": "control",
+    "controlType": "textbox",
+    "label": "Username",
+    "id": "username",
+    "name": "username",
+    "placeholder": "Enter username",
+    "required": true,
+    "class": "form-control",
+    "validation": [
+      {
+        "type": "pattern",
+        "pattern": "^[a-zA-Z0-9_]+$",
+        "errorMessage": "Username must contain only letters, numbers, and underscores."
+      },
+      {
+        "type": "compare",
+        "pattern": ["!=", "#password"],
+        "errorMessage": "Username must not be the same as the password."
+      }
+    ],
+    "newvalidation": [
+      {
+        "type": "pattern",
+        "pattern": "/^[a-zA-Z0-9_]+$/",
+        "errorMessage": "Username must contain only letters, numbers, and underscores."
+      },
+      {
+        "type": "compare",
+        "pattern": ["==", "#textControl1"],
+        "errorMessage": "Username must be equal"
+      },
+      {
+        "type": "compare",
+        "pattern": ["==", "#textControl1"],
+        "errorMessage": "Username must contain only letters, numbers, and underscores."
+      }
+    ],
+    "Conditions": [
+      {
+        "ref": "#control2",
+        "action": "Hide",
+        "match": ["input.col.id", "==", "tsesting"]
+      }
+    ]
+  },
+  "email": {
+    "type": "control",
+    "controlType": "textbox",
+    "label": "Email",
+    "id": "email",
+    "name": "email",
+    "placeholder": "Enter email",
+    "required": true,
+    "class": "form-control",
+    "validation": [
+      {
+        "type": "pattern",
+        "pattern": "^\\S+@\\S+\\.\\S+$",
+        "errorMessage": "Invalid email format."
+      }
+    ]
+  },
+  "password": {
+    "type": "control",
+    "controlType": "password",
+    "label": "Password",
+    "id": "password",
+    "placeholder": "Enter password",
+    "required": true,
+    "class": "form-control",
+    "validation": [
+      {
+        "type": "minLength",
+        "minLength": 8,
+        "errorMessage": "Password must be at least 8 characters long."
+      }
+    ]
+  },
+  "confirmPassword": {
+    "type": "control",
+    "controlType": "password",
+    "label": "Confirm Password",
+    "id": "confirmPassword",
+    "name": "confirm-password",
+    "placeholder": "Confirm password",
+    "required": true,
+    "class": "form-control",
+    "validation": [
+      {
+        "type": "minLength",
+        "minLength": 8,
+        "errorMessage": "Password must be at least 8 characters long."
+      },
+      {
+        "type": "equalTo",
+        "equalTo": "#password",
+        "errorMessage": "Passwords do not match."
+      }
+    ]
+  },
+  "age": {
+    "type": "control",
+    "controlType": "number",
+    "label": "Age",
+    "id": "age",
+    "name": "age",
+    "placeholder": "Enter age",
+    "required": true,
+    "class": "form-control",
+    "validation": [
+      {
+        "type": "range",
+        "min": 18,
+        "max": 100,
+        "errorMessage": "Age must be between 18 and 100."
+      }
+    ]
+  },
+  "country": {
+    "type": "control",
+    "controlType": "select",
+    "label": "Country",
+    "id": "country",
+    "name": "country",
+    "lookup": true,
+    "lookupKey": "countries",
+    "required": true,
+    "class": "form-control"
+  },
+  "submitButton": {
+    "type": "control",
+    "controlType": "button",
+    "buttonType": "submit",
+    "label": "Sign Up",
+    "id": "submitButton",
+    "class": "btn btn-primary"
+  }
+}
 ```
 
 # HELPERS
