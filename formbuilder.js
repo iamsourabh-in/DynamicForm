@@ -47,6 +47,8 @@ class FormBuilder {
         return this.createButton(field);
       case "Email":
         return this.createEmail(field);
+      case "Checkbox":
+        return this.createCheckbox(field);
       case "2Column":
         return this.createLayout(field);
       case "3Column":
@@ -184,7 +186,7 @@ class FormBuilder {
     return wrapper;
   }
 
-  createNumber(field) {
+  createCheckbox(field) {
     const wrapper = document.createElement("div");
     const label = document.createElement("label");
     const input = document.createElement("input");
