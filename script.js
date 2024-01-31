@@ -1,6 +1,6 @@
 let selectedControl = null;
 // Schema
-let schema = [ { "type": "6Column", "id": "1706706044914", "name": "6Column", "label": "6Column", "width": 6 }, { "type": "2Column", "id": "1706706108232", "name": "2Column", "label": "2Column", "width": 2 }, { "type": "2Column", "id": "1706706109406", "name": "2Column", "label": "2Column", "width": 2 } ];
+let schema = [];
 
 const uiSchema = {
   method: "POST",
@@ -36,8 +36,8 @@ function DropInDesignerHandler(event) {
   const elementType = event.dataTransfer.getData("type");
   const element = event.dataTransfer.getData("text/plain");
   if (elementType == "layout") {
-    //uiSchema.rows.push(createLayoutSchemaForDrop(element));
-    schema.push(createLayoutSchemaForDrop(element));
+    uiSchema.rows.push(createLayoutSchemaForDrop(element));
+    //schema.push(createLayoutSchemaForDrop(element));
   } else {
     schema.push(createSchemaForDrop(element));
   }
@@ -78,13 +78,13 @@ function handleDragOver(e) {
 }
 
 function renderJsonSchema() {
-  const jsonSchemaDisplay = document.getElementById("json-schema-box");
+  const jsonSchemaDisplay = document.getElementById("json-uischema-box");
   jsonSchemaDisplay.innerHTML = JSON.stringify(schema, null, 4);
 }
 
 function renderUIJsonSchema() {
   const jsonSchemaDisplay = document.getElementById("json-schema-box");
-  jsonSchemaDisplay.innerHTML += JSON.stringify(uiSchema, null, 4);
+  jsonSchemaDisplay.innerHTML = JSON.stringify(uiSchema, null, 4);
 }
 
 // RUN
@@ -109,6 +109,7 @@ function init() {
   renderToolbox();
   setupDesigner();
   renderJsonSchema();
+  renderUIJsonSchema();
   RefreshForm();
 }
 

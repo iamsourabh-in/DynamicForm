@@ -18,17 +18,17 @@ function createSchemaForDrop(element) {
 function createLayoutSchemaForDrop(element) {
   switch (element) {
     case "2Column":
-      return createLayoutSchema(2);
+      return createLayoutSchemaNew("Column", 2);
     case "3Column":
-      return createLayoutSchema(3);
+      return createLayoutSchemaNew("Column", 3);
     case "4Column":
-      return createLayoutSchema(4);
+      return createLayoutSchemaNew("Column", 4);
     case "5Column":
-      return createLayoutSchema(5);
+      return createLayoutSchemaNew("Column", 5);
     case "6Column":
-      return createLayoutSchema(6);
+      return createLayoutSchemaNew("Column", 6);
     case "1Column":
-      return createLayoutSchema(1);
+      return createLayoutSchemaNew("Column", 7);
 
     // etc for other field types
   }
@@ -107,31 +107,23 @@ function createLabelSchema(element) {
   };
 }
 
-function createLayoutSchema(columns) {
-  return {
-    type: columns + "Column",
-    id: Date.now().toString(),
-    name: columns + "Column",
-    label: columns + "Column",
-    width: columns,
-  };
-}
 
 function createLayoutSchemaNew(type, count) {
   const columns = [];
   for (let i = 0; i < count; i++) {
-    const column = createObject(i + 4, `aligned`, [], type);
+    const colWidth = 12 / count
+    const column = createObject(colWidth, `aligned`, [], type);
     columns.push(column);
   }
-  return { type: "Row", columns: columns };
+  return { type: "Row", id: Date.now().toString(), classList: "offset-md-2", columns: columns };
 }
 
-function createObject(width, className, controls, type) {
+function createObject(width, classNames, controls, type) {
   return {
     id: Date.now().toString(),
     type: type,
     width: width,
-    className: className,
+    classNames: classNames,
     controls: controls,
   };
 }

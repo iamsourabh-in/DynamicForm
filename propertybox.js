@@ -1,11 +1,32 @@
-function showLayoutProperties(controlId) {
-  const index = schema.findIndex((obj) => obj.id === controlId);
+function showLayoutProperties(row) {
+  const index = uiSchema.rows.findIndex((obj) => obj.id === row.id);
 
   const properties = document.getElementById("properties");
   properties.innerHTML = "";
   const propertiesHeader = document.createElement("h4");
-  propertiesHeader.innerText = `Properties for ${schema[index].name}`;
+  propertiesHeader.innerText = `Properties for Row`;
   properties.appendChild(propertiesHeader);
+
+  const classInput = createPropertyInput(
+    "class",
+    "text",
+    "class",
+    row.classList ? row.classList || "" : ""
+  );
+
+  properties.appendChild(classInput);
+
+  const updateButton = document.createElement("button");
+  updateButton.classList.add("btn", "btn-primary", "mt-5");
+  updateButton.innerText = "Update";
+  updateButton.addEventListener("click", function () { updateLayoutProperties(index) });
+  properties.appendChild(updateButton);
+
+  const removeButton = document.createElement("button");
+  removeButton.classList.add("btn", "btn-danger", "mt-5");
+  removeButton.innerText = "Remove";
+  removeButton.addEventListener("click", function () { removeLayoutProperties(index) });
+  properties.appendChild(removeButton);
 }
 
 function showControlProperties(controlId) {
@@ -115,7 +136,13 @@ function createPropertyInput(labelText, inputType, id, value) {
 
   return formGroup;
 }
-
+function updateLayoutProperties(index) {
+  const cssClass = document.getElementById("class").value;
+  uiSchema.rows[index].classList = cssClass;
+  hideProperties();
+  renderUIJsonSchema();
+  RefreshForm();
+}
 function updateControlProperties() {
   if (!selectedControl) return;
 
@@ -156,7 +183,11 @@ function hideProperties() {
   properties.innerHTML = "";
   selectedControl = null;
 }
-
+function removeLayoutProperties(index) {
+  uiSchema.rows.splice(index, 1);
+  hideProperties();
+  renderUIJsonSchema();
+}
 function removeControl() {
   if (!selectedControl) return;
 

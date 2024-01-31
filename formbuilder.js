@@ -1,3 +1,4 @@
+
 class FormBuilder {
   constructor(uiSchema, schema) {
     this.schema = schema;
@@ -9,26 +10,21 @@ class FormBuilder {
     this.container.innerHTML = "";
     this.form = document.createElement("form");
     this.container.appendChild(this.form);
-    // if (this.uiSchema.rows.length > 0) {
-    //   this.uiSchema.rows.forEach((row) => {
-    //     row.columns.forEach((column) => {
-    //       const element = this.createField(column);
-    //       this.form.appendChild(element);
-    //     });
-    //   });
-    // } else
-    if (schema != null && schema.length > 0) {
-      this.schema.forEach((field) => {
-        const element = this.createField(field);
-        this.form.appendChild(element);
-      });
-    } else {
-      this.container.style;
-      this.container.innerHTML =
-        "<h1> Drag Elements from the Toolbar here...</h1>";
-    }
+    if (this.uiSchema.rows.length > 0) {
+      this.form.appendChild(this.renderLayout(this.uiSchema));
+    } else
+      if (schema != null && schema.length > 0) {
+        this.schema.forEach((field) => {
+          const element = this.createField(field);
+          this.form.appendChild(element);
+        });
+      } else {
+        this.container.style;
+        this.container.innerHTML =
+          "<h1> Drag Elements from the Toolbar here...</h1>";
+      }
   }
-  renderFull() {}
+  renderFull() { }
   createField(field) {
     switch (field.type) {
       case "Textbox":
@@ -197,14 +193,14 @@ class FormBuilder {
     for (let i = 0; i < 1; i++) {
       // Create row
       const row = document.createElement("div");
-      row.classList.add("row");
+      row.classList.add("row", "w-50");
       row.id = field.id;
       for (let j = 0; j < cols; j++) {
         // Create column
         const col = document.createElement("div");
         let colid = Math.floor(Math.random() * 1000);
         col.id = Date.now().toString() + colid;
-        col.setAttribute("data-index", j);
+        col.setAttribute("data-index", i + "," + j);
         // Size column based on number of cols
         col.classList.add("col-md-" + Math.floor(12 / cols), "p-5", "dropzone");
 
@@ -221,25 +217,48 @@ class FormBuilder {
     return container;
   }
 
-  renderLayout(layout) {
-    let result = "";
+  renderLayout(uiSchema) {
+    let container = document.createElement('div');
+    container.classList.add('container');
 
-    layout.rows.forEach((row) => {
-      result += '<div class="row">';
-      row.columns.forEach((column) => {
-        result += `<div class="col-${column.width} ${column.className || ""}">`;
-        if (column.controls) {
-          column.controls.forEach((control) => {
-            const controlDetails = controls[control.controlId];
-            result += renderControl(controlDetails);
-          });
-        }
-        result += "</div>";
+    let rowCount = 0;
+    let colCount = 0;
+    uiSchema.rows.forEach(row => {
+      let rowDiv = document.createElement('div');
+      rowDiv.classList.add('row', "show-hover", row.classList);
+      rowDiv.id = row.id;
+      rowDiv.addEventListener("click", () => {
+        selectedControl = container;
+        showLayoutProperties(row);
       });
-      result += "</div>";
+      row.columns.forEach(column => {
+        const colDiv = document.createElement('div');
+        // const colWidth = 12 / column.width;
+        //colDiv.classList.add(`col-md-${colWidth}`);
+        colDiv.setAttribute("data-index", rowCount.toString() + "," + colCount.toString());
+        colDiv.classList.add("col-md-" + column.width, "p-5", "dropzone", "show-hover");
+        colDiv.style.border = "1px dashed #ccc";
+        colDiv.style.padding = "10px";
+
+        column.controls.forEach(control => {
+          // Customize control rendering based on type and controlId
+          const controlElement = document.createElement('input');
+          controlElement.type = 'text';
+          controlElement.id = control.controlId;
+
+          colDiv.appendChild(controlElement);
+        });
+
+        colCount++;
+        rowDiv.appendChild(colDiv);
+
+      });
+      rowCount++;
+      colCount = 0;
+      container.appendChild(rowDiv);
     });
 
-    return result;
+    return container;
   }
   // Other field creation methods
 
