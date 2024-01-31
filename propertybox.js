@@ -189,9 +189,10 @@ function hideProperties() {
 function removeLayoutProperties(index) {
   uiSchema.rows.splice(index, 1);
   hideProperties();
-  renderUIJsonSchema();
+  
   UpdateLocalstorage();
   RefreshForm();
+  renderUIJsonSchema();
 }
 function removeControl() {
   if (!selectedControl) return;
@@ -202,12 +203,14 @@ function removeControl() {
   // Remove the corresponding entry from the JSON Schema
   const controlId = selectedControl.children[1].id;
   schema = schema.filter((control) => control.id !== controlId);
+  uiSchema = uiSchema.rows.filter((control) => control.id !== controlId);
   console.log(schema);
   // // Render the updated JSON Schema
   // renderJsonSchema();
 
   // Clear the properties section
   hideProperties();
+  UpdateLocalstorage();
+  RefreshForm(); 
   renderJsonSchema();
-  UpdateLocalstorage() 
 }
