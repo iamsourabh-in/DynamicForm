@@ -40,7 +40,7 @@ function createLayoutSchemaForDrop(element) {
     case "6Column":
       return createLayoutSchemaNew("Column", 6);
     case "1Column":
-      return createLayoutSchemaNew("Column", 7);
+      return createLayoutSchemaNew("Column", 1);
     case "8Column":
       return createLayoutSchemaNew("Column", 8);
     case "12Column":
@@ -241,7 +241,7 @@ function createLayoutSchemaNew(type, count) {
     const column = createObject(colWidth, `aligned`, [], type);
     columns.push(column);
   }
-  return { type: "Row", id: Date.now().toString(), classList: "offset-md-2", columns: columns };
+  return { type: "Row", id: Date.now().toString(), classList: "offset-md-0", columns: columns };
 }
 
 function createObject(width, classNames, controls, type) {

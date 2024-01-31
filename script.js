@@ -1,8 +1,8 @@
 let selectedControl = null;
 // Schema
-let schema = [];
+var schema = [];
 
-const uiSchema = {
+var uiSchema = {
   method: "POST",
   action: "http://localhost:8080/api/v1/form",
   type: "layout",
@@ -55,6 +55,7 @@ function handleDrop(event) {
   DropInDesignerHandler(event);
 
   RefreshForm();
+  UpdateLocalstorage();
   //createControlInDesigner(elementType, e);
   renderJsonSchema();
   renderUIJsonSchema();
@@ -109,7 +110,27 @@ function setupDesigner() {
   designer.addEventListener("drop", handleDrop);
 }
 
+// Generate a function to set and get item from localstorage
+function restore() {
+  let uischema = localStorage.getItem("uischema");
+  let controls = localStorage.getItem("schema");
+  if (uischema != null) {
+    uiSchema = JSON.parse(uischema);
+  }
+  if (controls != null)
+    schema = JSON.parse(controls);
+
+}
+
+function UpdateLocalstorage() {
+  localStorage.setItem("uischema", JSON.stringify(uiSchema));
+  localStorage.setItem("schema", JSON.stringify(schema));
+}
+
+
+
 function init() {
+  restore();
   renderToolbox();
   setupDesigner();
   renderJsonSchema();

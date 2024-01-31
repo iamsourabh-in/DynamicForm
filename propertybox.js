@@ -143,6 +143,7 @@ function updateLayoutProperties(index) {
   hideProperties();
   renderUIJsonSchema();
   RefreshForm();
+  UpdateLocalstorage();
 }
 function updateControlProperties() {
   if (!selectedControl) return;
@@ -165,6 +166,7 @@ function updateControlProperties() {
   });
   hideProperties();
   renderJsonSchema();
+  UpdateLocalstorage() 
 }
 
 function updateSchemaInfo(schema, id, update) {
@@ -188,6 +190,8 @@ function removeLayoutProperties(index) {
   uiSchema.rows.splice(index, 1);
   hideProperties();
   renderUIJsonSchema();
+  UpdateLocalstorage();
+  RefreshForm();
 }
 function removeControl() {
   if (!selectedControl) return;
@@ -205,4 +209,5 @@ function removeControl() {
   // Clear the properties section
   hideProperties();
   renderJsonSchema();
+  UpdateLocalstorage() 
 }
