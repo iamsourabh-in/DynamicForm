@@ -10,6 +10,18 @@ function createSchemaForDrop(element) {
       return createRadioSchema(element);
     case "Label":
       return createLabelSchema(element);
+    case "Checkbox":
+      return createCheckboxSchema(element);
+    case "Slider":
+      return createSliderSchema(element);
+    case "DatePicker":
+      return createDatePickerSchema(element);
+    case "Button":
+      return createButtonSchema(element);
+    case "FileUpload":
+      return createFileUploadSchema(element);
+    case "Email":
+      return createEmailSchema(element);
 
     // etc for other field types
   }
@@ -29,7 +41,10 @@ function createLayoutSchemaForDrop(element) {
       return createLayoutSchemaNew("Column", 6);
     case "1Column":
       return createLayoutSchemaNew("Column", 7);
-
+    case "8Column":
+      return createLayoutSchemaNew("Column", 8);
+    case "12Column":
+      return createLayoutSchemaNew("Column", 12);
     // etc for other field types
   }
 }
@@ -38,13 +53,27 @@ function createLayoutSchemaForDrop(element) {
 function createTextBoxSchema(element) {
   return {
     type: element,
+    controlType: "textbox",
+    label: element,
     id: Date.now().toString(),
     name: element,
-    label: element,
     placeholder: element,
-    required: false,
-    value: "",
-    class: "",
+    required: true,
+    class: "form-control",
+    validation: [
+      {
+        type: "pattern",
+        pattern: "^[a-zA-Z0-9_]+$",
+        errorMessage:
+          "Username must contain only letters, numbers, and underscores.",
+      },
+      {
+        type: "compare",
+        pattern: ["!=", "#password"],
+        errorMessage: "Username must not be the same as the password.",
+      },
+    ]
+
   };
 }
 function createSelectSchema(element) {
@@ -57,6 +86,7 @@ function createSelectSchema(element) {
     required: false,
     value: "",
     options: [{ label: "Option1", value: "Option1" }],
+    lookup: true,
     multiple: false,
     accept: "",
     class: "",
@@ -81,6 +111,102 @@ function createNumberSchema(element) {
 }
 
 function createRadioSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
+function createEmailSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
+function createCheckboxSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
+function createButtonSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "btn btn-primary",
+  };
+}
+
+function createDatePickerSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
+function createSliderSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
+function createFileUploadSchema(element) {
   return {
     type: element,
     id: Date.now().toString(),

@@ -89,6 +89,7 @@ function showControlProperties(controlId) {
   removeButton.innerText = "Remove";
   removeButton.addEventListener("click", removeControl);
   properties.appendChild(removeButton);
+  
 }
 
 function createSelectProperty(field) {

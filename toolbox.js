@@ -11,10 +11,10 @@ const controls = [
   { key: "Email", icon: "bi-mailbox", description: "Email Input", type: "control" },
   { key: "Checkbox", icon: "bi-card-checklist", description: "Checkbox", type: "control" },
   { key: "Radio", icon: "bi-0-circle", description: "Radio Button", type: "control" },
-  { key: "Date Picker", icon: "bi-calendar-date", description: "Date Picker", type: "control" },
+  { key: "DatePicker", icon: "bi-calendar-date", description: "Date Picker", type: "control" },
   { key: "Slider", icon: "bi-sliders", description: "Slider Input", type: "control" },
   {
-    key: "File Upload",
+    key: "FileUpload",
     icon: "bi-file-earmark-arrow-up",
     description: "File Upload",
     type: "control",
@@ -27,6 +27,8 @@ const controls = [
   { key: "4Column", icon: "bi-dice-4", description: "Four Column", type: "layout" },
   // { key: "5Column", icon: "bi-dice-5", description: "Five Column", type: "layout" },
   { key: "6Column", icon: "bi-dice-6", description: "Six Column", type: "layout" },
+  { key: "8Column", icon: "bi-dice-6", description: "Eight Column", type: "layout" },
+  { key: "12Column", icon: "bi-dice-6", description: "Twelve Column", type: "layout" },
   { key: "Iframe", icon: "bi-bounding-box", description: "Dynamic Form", type: "form" },
 ];
 

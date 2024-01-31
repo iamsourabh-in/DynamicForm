@@ -39,7 +39,11 @@ function DropInDesignerHandler(event) {
     uiSchema.rows.push(createLayoutSchemaForDrop(element));
     //schema.push(createLayoutSchemaForDrop(element));
   } else {
-    schema.push(createSchemaForDrop(element));
+    let data = createSchemaForDrop(element);
+    let row = event.target.attributes["data-index"].value.split(",")[0];
+    let col = event.target.attributes["data-index"].value.split(",")[1];
+    uiSchema.rows[row].columns[col].controls.push(data);
+    schema.push(data);
   }
 }
 

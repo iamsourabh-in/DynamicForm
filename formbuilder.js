@@ -35,8 +35,18 @@ class FormBuilder {
         return this.createNumber(field);
       case "Radio":
         return this.createRadio(field);
+      case "DatePicker":
+        return this.createDate(field);
+      case "Slider":
+        return this.createSlider(field);
+      case "FileUpload":
+        return this.createFile(field);
       case "Label":
         return this.createLabel(field);
+      case "Button":
+        return this.createButton(field);
+      case "Email":
+        return this.createEmail(field);
       case "2Column":
         return this.createLayout(field);
       case "3Column":
@@ -47,6 +57,10 @@ class FormBuilder {
         return this.createLayout(field);
       case "6Column":
         return this.createLayout(field);
+      case "8Column":
+        return this.createLayout(field);
+      case "12Column":
+        return this.createLayout(field);
       case "1Column":
         return this.createLayout(field);
       case "Row":
@@ -55,6 +69,35 @@ class FormBuilder {
       // etc for other field types
     }
   }
+
+  createEmail(field) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("form-group", "show-hover");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+
+    input.classList.add("form-control");
+    label.textContent = field.label;
+    input.id = field.id;
+    input.type = "email";
+    input.name = field.name;
+    input.placeholder = field.placeholder;
+    input.value = field.value;
+
+    wrapper.name = field.name;
+    wrapper.addEventListener("click", (event) => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+      event.stopPropagation();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+    return wrapper;
+  }
+
+
 
   createTextBox(field) {
     const wrapper = document.createElement("div");
@@ -71,9 +114,10 @@ class FormBuilder {
     input.value = field.value;
 
     wrapper.name = field.name;
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.appendChild(label);
@@ -98,6 +142,7 @@ class FormBuilder {
     wrapper.addEventListener("click", () => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     field.options.forEach((option) => {
@@ -127,9 +172,115 @@ class FormBuilder {
     input.value = field.value;
 
     wrapper.name = field.name;
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+    return wrapper;
+  }
+
+  createNumber(field) {
+    const wrapper = document.createElement("div");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+
+    input.id = field.id;
+    input.classList.add("form-control");
+    label.innerHTML = field.label;
+    input.type = "checkbox";
+    input.name = field.name;
+    input.placeholder = field.placeholder;
+    input.value = field.value;
+
+    wrapper.name = field.name;
+    wrapper.addEventListener("click", (event) => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+      event.stopPropagation();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+    return wrapper;
+  }
+
+  createDate(field) {
+    const wrapper = document.createElement("div");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+
+    input.id = field.id;
+    input.classList.add("form-control");
+    label.innerHTML = field.label;
+    input.type = "date";
+    input.name = field.name;
+    input.placeholder = field.placeholder;
+    input.value = field.value;
+
+    wrapper.name = field.name;
+    wrapper.addEventListener("click", (event) => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+      event.stopPropagation();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+    return wrapper;
+  }
+
+  createFile(field) {
+    const wrapper = document.createElement("div");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+
+    input.id = field.id;
+    input.classList.add("form-control");
+    label.innerHTML = field.label;
+    input.type = "file";
+    input.name = field.name;
+    input.placeholder = field.placeholder;
+    input.value = field.value;
+
+    wrapper.name = field.name;
+    wrapper.addEventListener("click", (event) => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+      event.stopPropagation();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+
+    return wrapper;
+  }
+
+
+  createSlider(field) {
+    const wrapper = document.createElement("div");
+    const label = document.createElement("label");
+    const input = document.createElement("input");
+
+    input.id = field.id;
+    input.classList.add("form-control");
+    label.innerHTML = field.label;
+    input.type = "range";
+    input.name = field.name;
+    input.placeholder = field.placeholder;
+    input.value = field.value;
+
+    wrapper.name = field.name;
+    wrapper.addEventListener("click", (event) => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.appendChild(label);
@@ -151,9 +302,10 @@ class FormBuilder {
     input.placeholder = field.placeholder;
     input.value = field.value;
 
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.name = field.name;
@@ -179,6 +331,25 @@ class FormBuilder {
 
     return wrapper;
   }
+
+  createButton(field) {
+    const wrapper = document.createElement("div");
+    const button = document.createElement("button");
+
+    button.innerHTML = field.label;
+    button.className = field.class;;
+    wrapper.addEventListener("click", () => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+    });
+
+    wrapper.name = field.name;
+    wrapper.appendChild(button);
+
+    return wrapper;
+  }
+
+
   // Create rows and cols
   createLayout(field) {
     let rows = 1;
@@ -227,9 +398,10 @@ class FormBuilder {
       let rowDiv = document.createElement('div');
       rowDiv.classList.add('row', "show-hover", row.classList);
       rowDiv.id = row.id;
-      rowDiv.addEventListener("click", () => {
+      rowDiv.addEventListener("click", (event) => {
         selectedControl = container;
         showLayoutProperties(row);
+        event.stopPropagation();
       });
       row.columns.forEach(column => {
         const colDiv = document.createElement('div');
@@ -242,9 +414,7 @@ class FormBuilder {
 
         column.controls.forEach(control => {
           // Customize control rendering based on type and controlId
-          const controlElement = document.createElement('input');
-          controlElement.type = 'text';
-          controlElement.id = control.controlId;
+          let controlElement = this.createField(control);
 
           colDiv.appendChild(controlElement);
         });
