@@ -1,28 +1,43 @@
 class FormBuilder {
-  constructor(uiSchema, schema) {
+  constructor(uiSchema, schema, preview) {
     this.schema = schema;
     this.uiSchema = uiSchema;
+    this.preview = preview;
   }
 
   render(container) {
-    this.container = document.querySelector(container);
-    this.container.innerHTML = "";
-    this.form = document.createElement("form");
-    this.container.appendChild(this.form);
-    if (this.uiSchema.rows != null && this.uiSchema.rows.length > 0) {
-      this.form.appendChild(this.renderLayout(this.uiSchema));
-    } else if (schema != null && schema.length > 0) {
-      this.schema.forEach((field) => {
-        const element = this.createField(field);
-        this.form.appendChild(element);
-      });
+    if (this.preview) {
+      this.container = document.querySelector(container);
+      this.container.innerHTML = "";
+      this.form = document.createElement("form");
+      this.container.appendChild(this.form);
+      if (this.uiSchema.rows != null && this.uiSchema.rows.length > 0) {
+        this.form.appendChild(this.renderPreview(this.uiSchema));
+      } else {
+        this.container.style;
+        this.container.innerHTML =
+          "<h1> Drag Elements from the Toolbar in Designer...</h1>";
+      }
     } else {
-      this.container.style;
-      this.container.innerHTML =
-        "<h1> Drag Elements from the Toolbar here...</h1>";
+      this.container = document.querySelector(container);
+      this.container.innerHTML = "";
+      this.form = document.createElement("form");
+      this.container.appendChild(this.form);
+      if (this.uiSchema.rows != null && this.uiSchema.rows.length > 0) {
+        this.form.appendChild(this.renderLayout(this.uiSchema));
+      } else if (schema != null && schema.length > 0) {
+        this.schema.forEach((field) => {
+          const element = this.createField(field);
+          this.form.appendChild(element);
+        });
+      } else {
+        this.container.style;
+        this.container.innerHTML =
+          "<h1> Drag Elements from the Toolbar here...</h1>";
+      }
     }
   }
-  renderFull() {}
+
   createField(field) {
     switch (field.type) {
       case "Textbox":
@@ -436,7 +451,52 @@ class FormBuilder {
           "show-hover"
         );
         colDiv.style.border = "1px dashed #ccc";
-        colDiv.style.padding = "10px";
+
+        column.controls.forEach((control) => {
+          // Customize control rendering based on type and controlId
+          let controlElement = this.createField(control);
+
+          colDiv.appendChild(controlElement);
+        });
+
+        colCount++;
+        rowDiv.appendChild(colDiv);
+      });
+      rowCount++;
+      colCount = 0;
+      container.appendChild(rowDiv);
+    });
+
+    return container;
+  }
+
+  renderPreview(uiSchema) {
+    let container = document.createElement("div");
+    container.classList.add("container-fluid");
+
+    let rowCount = 0;
+    let colCount = 0;
+    uiSchema.rows.forEach((row) => {
+      let rowDiv = document.createElement("div");
+      rowDiv.classList.add("row", "show-hover");
+      row.classList.forEach(function (cssClass) {
+        rowDiv.classList.add(cssClass);
+      });
+      rowDiv.id = row.id;
+      rowDiv.addEventListener("click", (event) => {
+        selectedControl = container;
+        showLayoutProperties(row);
+        event.stopPropagation();
+      });
+      row.columns.forEach((column) => {
+        const colDiv = document.createElement("div");
+        // const colWidth = 12 / column.width;
+        //colDiv.classList.add(`col-md-${colWidth}`);
+        colDiv.setAttribute(
+          "data-index",
+          rowCount.toString() + "," + colCount.toString()
+        );
+        colDiv.classList.add("col-md-" + column.width, "p-5");
 
         column.controls.forEach((control) => {
           // Customize control rendering based on type and controlId

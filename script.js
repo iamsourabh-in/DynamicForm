@@ -55,6 +55,7 @@ function handleDrop(event) {
   DropInDesignerHandler(event);
 
   RefreshForm();
+  RenderPreview();
   UpdateLocalstorage();
   //createControlInDesigner(elementType, e);
   renderJsonSchema();
@@ -94,8 +95,13 @@ function renderUIJsonSchema() {
 
 // RUN
 function RefreshForm() {
-  const form = new FormBuilder(uiSchema, schema);
+  const form = new FormBuilder(uiSchema, schema, false);
   form.render("#designer");
+}
+
+function RenderPreview() {
+  const form = new FormBuilder(uiSchema, schema, true);
+  form.render("#preview");
 }
 
 function setupDesigner() {
@@ -117,17 +123,13 @@ function restore() {
   if (uischema != null) {
     uiSchema = JSON.parse(uischema);
   }
-  if (controls != null)
-    schema = JSON.parse(controls);
-
+  if (controls != null) schema = JSON.parse(controls);
 }
 
 function UpdateLocalstorage() {
   localStorage.setItem("uischema", JSON.stringify(uiSchema));
   localStorage.setItem("schema", JSON.stringify(schema));
 }
-
-
 
 function init() {
   restore();
@@ -136,6 +138,7 @@ function init() {
   renderJsonSchema();
   renderUIJsonSchema();
   RefreshForm();
+  RenderPreview();
 }
 
 init();

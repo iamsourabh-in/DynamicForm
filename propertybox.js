@@ -169,9 +169,11 @@ function updateControlProperties() {
     value: value,
     class: cssClass,
   });
+  RenderPreview();
   hideProperties();
   renderJsonSchema();
   UpdateLocalstorage();
+  RefreshForm();
 }
 
 function updateSchemaInfo(schema, id, update) {
@@ -198,6 +200,7 @@ function removeLayoutProperties(index) {
 
   UpdateLocalstorage();
   RefreshForm();
+  RenderPreview();
   renderUIJsonSchema();
 }
 function removeControl() {
