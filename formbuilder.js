@@ -480,10 +480,10 @@ class FormBuilder {
     let colCount = 0;
     uiSchema.rows.forEach((row) => {
       let rowDiv = document.createElement("div");
-      rowDiv.classList.add("row", "show-hover");
-      row.classList.forEach(function (cssClass) {
-        rowDiv.classList.add(cssClass);
-      });
+      rowDiv.classList.add("row");
+      //row.classList.forEach(function (cssClass) {
+      //  rowDiv.classList.add(cssClass);
+      //});
       rowDiv.id = row.id;
       // rowDiv.addEventListener("click", (event) => {
       //   selectedControl = container;
