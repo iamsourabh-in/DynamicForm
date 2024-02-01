@@ -25,12 +25,14 @@ class FormBuilder {
       this.container.appendChild(this.form);
       if (this.uiSchema.rows != null && this.uiSchema.rows.length > 0) {
         this.form.appendChild(this.renderLayout(this.uiSchema));
-      } else if (schema != null && schema.length > 0) {
-        this.schema.forEach((field) => {
-          const element = this.createField(field);
-          this.form.appendChild(element);
-        });
-      } else {
+      } 
+      // else if (schema != null && schema.length > 0) {
+      //   this.schema.forEach((field) => {
+      //     const element = this.createField(field);
+      //     this.form.appendChild(element);
+      //   });
+      // }
+       else {
         this.container.style;
         this.container.innerHTML =
           "<h1> Drag Elements from the Toolbar here...</h1>";
@@ -483,11 +485,11 @@ class FormBuilder {
         rowDiv.classList.add(cssClass);
       });
       rowDiv.id = row.id;
-      rowDiv.addEventListener("click", (event) => {
-        selectedControl = container;
-        showLayoutProperties(row);
-        event.stopPropagation();
-      });
+      // rowDiv.addEventListener("click", (event) => {
+      //   selectedControl = container;
+      //   showLayoutProperties(row);
+      //   event.stopPropagation();
+      // });
       row.columns.forEach((column) => {
         const colDiv = document.createElement("div");
         // const colWidth = 12 / column.width;

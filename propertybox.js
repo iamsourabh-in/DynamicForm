@@ -206,13 +206,24 @@ function removeLayoutProperties(index) {
 function removeControl() {
   if (!selectedControl) return;
 
-  // Remove the selected control from the designer
+  // Remove the corresponding entry from the JSON and UI Schema
+  const controlId = selectedControl.children[1].id;
   selectedControl.remove();
 
-  // Remove the corresponding entry from the JSON Schema
-  const controlId = selectedControl.children[1].id;
+  for (let i = 0; i < uiSchema.rows.length; i++) {
+    for (let j = 0; j < uiSchema.rows[i].columns.length; j++) {
+      const index = uiSchema.rows[i].columns[j].controls.findIndex(
+        (obj) => obj.id === controlId
+      );
+      if (index != -1) uiSchema.rows[i].columns[j].controls.splice(index, 1);
+    }
+  }
+  // uiSchema.rows.forEach((row) => {
+  //   row = row.columns.forEach((column) => {
+  //     column = column.controls.filter((control) => control.id !== controlId);
+  //   });
+  // });
   schema = schema.filter((control) => control.id !== controlId);
-  uiSchema = uiSchema.rows.filter((control) => control.id !== controlId);
   console.log(schema);
   // // Render the updated JSON Schema
   // renderJsonSchema();
@@ -222,4 +233,5 @@ function removeControl() {
   UpdateLocalstorage();
   RefreshForm();
   renderJsonSchema();
+  renderUIJsonSchema();
 }
