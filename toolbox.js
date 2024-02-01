@@ -21,6 +21,7 @@ const controls = [
   },
   { key: "Label", icon: "bi-bookmark", description: "Label", type: "control" },
   { key: "Button", icon: "bi-box2", description: "Button", type: "control" },
+  { key: "Reset", icon: "bi-box2-fill", description: "Reset Button", type: "control" },
   { key: "1Column", icon: "bi-menu-button-wide", description: "One Row", type: "layout" },
   { key: "2Column", icon: "bi-dice-2", description: "Two Column", type: "layout" },
   { key: "3Column", icon: "bi-dice-3", description: "Three Column", type: "layout" },

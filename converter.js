@@ -22,6 +22,8 @@ function createSchemaForDrop(element) {
       return createFileUploadSchema(element);
     case "Email":
       return createEmailSchema(element);
+    case "Reset":
+      return createResetButtonSchema(element);
 
     // etc for other field types
   }
@@ -55,6 +57,7 @@ function createTextBoxSchema(element) {
     type: element,
     controlType: "textbox",
     label: element,
+    showLabel: true,
     id: Date.now().toString(),
     name: element,
     placeholder: element,
@@ -72,8 +75,7 @@ function createTextBoxSchema(element) {
         pattern: ["!=", "#password"],
         errorMessage: "Username must not be the same as the password.",
       },
-    ]
-
+    ],
   };
 }
 function createSelectSchema(element) {
@@ -83,9 +85,13 @@ function createSelectSchema(element) {
     name: element,
     label: element,
     placeholder: element,
+    showLabel: true,
     required: false,
     value: "",
-    options: [{ label: "Option1", value: "Option1" }],
+    options: [
+      { label: "Option1", value: "Option1" },
+      { label: "Option2", value: "Option2" },
+    ],
     lookup: true,
     multiple: false,
     accept: "",
@@ -98,6 +104,7 @@ function createNumberSchema(element) {
     type: element,
     id: Date.now().toString(),
     name: element,
+    showLabel: true,
     label: element,
     placeholder: element,
     required: false,
@@ -173,6 +180,21 @@ function createButtonSchema(element) {
     class: "btn btn-primary",
   };
 }
+function createResetButtonSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "btn btn-danger",
+  };
+}
 
 function createDatePickerSchema(element) {
   return {
@@ -233,15 +255,19 @@ function createLabelSchema(element) {
   };
 }
 
-
 function createLayoutSchemaNew(type, count) {
   const columns = [];
   for (let i = 0; i < count; i++) {
-    const colWidth = 12 / count
+    const colWidth = 12 / count;
     const column = createObject(colWidth, `aligned`, [], type);
     columns.push(column);
   }
-  return { type: "Row", id: Date.now().toString(), classList: "offset-md-0", columns: columns };
+  return {
+    type: "Row",
+    id: Date.now().toString(),
+    classList: ["offset-md-0", "w-100"],
+    columns: columns,
+  };
 }
 
 function createObject(width, classNames, controls, type) {

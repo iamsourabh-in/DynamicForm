@@ -1,4 +1,3 @@
-
 class FormBuilder {
   constructor(uiSchema, schema) {
     this.schema = schema;
@@ -10,21 +9,20 @@ class FormBuilder {
     this.container.innerHTML = "";
     this.form = document.createElement("form");
     this.container.appendChild(this.form);
-    if (this.uiSchema.rows.length > 0) {
+    if (this.uiSchema.rows != null && this.uiSchema.rows.length > 0) {
       this.form.appendChild(this.renderLayout(this.uiSchema));
-    } else
-      if (schema != null && schema.length > 0) {
-        this.schema.forEach((field) => {
-          const element = this.createField(field);
-          this.form.appendChild(element);
-        });
-      } else {
-        this.container.style;
-        this.container.innerHTML =
-          "<h1> Drag Elements from the Toolbar here...</h1>";
-      }
+    } else if (schema != null && schema.length > 0) {
+      this.schema.forEach((field) => {
+        const element = this.createField(field);
+        this.form.appendChild(element);
+      });
+    } else {
+      this.container.style;
+      this.container.innerHTML =
+        "<h1> Drag Elements from the Toolbar here...</h1>";
+    }
   }
-  renderFull() { }
+  renderFull() {}
   createField(field) {
     switch (field.type) {
       case "Textbox":
@@ -45,6 +43,8 @@ class FormBuilder {
         return this.createLabel(field);
       case "Button":
         return this.createButton(field);
+      case "Reset":
+        return this.createResetButton(field);
       case "Email":
         return this.createEmail(field);
       case "Checkbox":
@@ -99,8 +99,6 @@ class FormBuilder {
     return wrapper;
   }
 
-
-
   createTextBox(field) {
     const wrapper = document.createElement("div");
     wrapper.classList.add("form-group", "show-hover");
@@ -141,7 +139,7 @@ class FormBuilder {
     select.value = field.value;
 
     wrapper.name = field.name;
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
       event.stopPropagation();
@@ -264,7 +262,6 @@ class FormBuilder {
     return wrapper;
   }
 
-
   createSlider(field) {
     const wrapper = document.createElement("div");
     const label = document.createElement("label");
@@ -339,7 +336,7 @@ class FormBuilder {
     const button = document.createElement("button");
 
     button.innerHTML = field.label;
-    button.className = field.class;;
+    button.className = field.class;
     wrapper.addEventListener("click", () => {
       selectedControl = wrapper;
       showControlProperties(field.id);
@@ -348,9 +345,25 @@ class FormBuilder {
     wrapper.name = field.name;
     wrapper.appendChild(button);
 
-    return wrapper;
+    return button;
   }
 
+  createResetButton(field) {
+    const wrapper = document.createElement("div");
+    const button = document.createElement("button");
+
+    button.innerHTML = field.label;
+    button.className = field.class;
+    wrapper.addEventListener("click", () => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+    });
+
+    wrapper.name = field.name;
+    wrapper.appendChild(button);
+
+    return button;
+  }
 
   // Create rows and cols
   createLayout(field) {
@@ -391,30 +404,41 @@ class FormBuilder {
   }
 
   renderLayout(uiSchema) {
-    let container = document.createElement('div');
-    container.classList.add('container');
+    let container = document.createElement("div");
+    container.classList.add("container-fluid");
 
     let rowCount = 0;
     let colCount = 0;
-    uiSchema.rows.forEach(row => {
-      let rowDiv = document.createElement('div');
-      rowDiv.classList.add('row', "show-hover", row.classList);
+    uiSchema.rows.forEach((row) => {
+      let rowDiv = document.createElement("div");
+      rowDiv.classList.add("row", "show-hover");
+      row.classList.forEach(function (cssClass) {
+        rowDiv.classList.add(cssClass);
+      });
       rowDiv.id = row.id;
       rowDiv.addEventListener("click", (event) => {
         selectedControl = container;
         showLayoutProperties(row);
         event.stopPropagation();
       });
-      row.columns.forEach(column => {
-        const colDiv = document.createElement('div');
+      row.columns.forEach((column) => {
+        const colDiv = document.createElement("div");
         // const colWidth = 12 / column.width;
         //colDiv.classList.add(`col-md-${colWidth}`);
-        colDiv.setAttribute("data-index", rowCount.toString() + "," + colCount.toString());
-        colDiv.classList.add("col-md-" + column.width, "p-5", "dropzone", "show-hover");
+        colDiv.setAttribute(
+          "data-index",
+          rowCount.toString() + "," + colCount.toString()
+        );
+        colDiv.classList.add(
+          "col-md-" + column.width,
+          "p-5",
+          "dropzone",
+          "show-hover"
+        );
         colDiv.style.border = "1px dashed #ccc";
         colDiv.style.padding = "10px";
 
-        column.controls.forEach(control => {
+        column.controls.forEach((control) => {
           // Customize control rendering based on type and controlId
           let controlElement = this.createField(control);
 
@@ -423,7 +447,6 @@ class FormBuilder {
 
         colCount++;
         rowDiv.appendChild(colDiv);
-
       });
       rowCount++;
       colCount = 0;

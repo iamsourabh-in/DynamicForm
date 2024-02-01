@@ -83,12 +83,12 @@ function handleDragOver(e) {
 }
 
 function renderJsonSchema() {
-  const jsonSchemaDisplay = document.getElementById("json-uischema-box");
+  const jsonSchemaDisplay = document.getElementById("json-schema-box");
   jsonSchemaDisplay.innerHTML = JSON.stringify(schema, null, 4);
 }
 
 function renderUIJsonSchema() {
-  const jsonSchemaDisplay = document.getElementById("json-schema-box");
+  const jsonSchemaDisplay = document.getElementById("json-uischema-box");
   jsonSchemaDisplay.innerHTML = JSON.stringify(uiSchema, null, 4);
 }
 

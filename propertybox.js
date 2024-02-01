@@ -19,13 +19,17 @@ function showLayoutProperties(row) {
   const updateButton = document.createElement("button");
   updateButton.classList.add("btn", "btn-primary", "mt-5");
   updateButton.innerText = "Update";
-  updateButton.addEventListener("click", function () { updateLayoutProperties(index) });
+  updateButton.addEventListener("click", function () {
+    updateLayoutProperties(index);
+  });
   properties.appendChild(updateButton);
 
   const removeButton = document.createElement("button");
   removeButton.classList.add("btn", "btn-danger", "mt-5");
   removeButton.innerText = "Remove";
-  removeButton.addEventListener("click", function () { removeLayoutProperties(index) });
+  removeButton.addEventListener("click", function () {
+    removeLayoutProperties(index);
+  });
   properties.appendChild(removeButton);
 }
 
@@ -72,7 +76,6 @@ function showControlProperties(controlId) {
     properties.appendChild(option);
   }
 
-
   properties.appendChild(nameInput);
   properties.appendChild(idInput);
   properties.appendChild(classInput);
@@ -89,7 +92,6 @@ function showControlProperties(controlId) {
   removeButton.innerText = "Remove";
   removeButton.addEventListener("click", removeControl);
   properties.appendChild(removeButton);
-  
 }
 
 function createSelectProperty(field) {
@@ -139,7 +141,10 @@ function createPropertyInput(labelText, inputType, id, value) {
 }
 function updateLayoutProperties(index) {
   const cssClass = document.getElementById("class").value;
-  uiSchema.rows[index].classList = cssClass;
+  uiSchema.rows[index].classList = [];
+  cssClass.split(",").forEach((css) => {
+    uiSchema.rows[index].classList.push(css);
+  });
   hideProperties();
   renderUIJsonSchema();
   RefreshForm();
@@ -166,7 +171,7 @@ function updateControlProperties() {
   });
   hideProperties();
   renderJsonSchema();
-  UpdateLocalstorage() 
+  UpdateLocalstorage();
 }
 
 function updateSchemaInfo(schema, id, update) {
@@ -186,10 +191,11 @@ function hideProperties() {
   properties.innerHTML = "";
   selectedControl = null;
 }
+
 function removeLayoutProperties(index) {
   uiSchema.rows.splice(index, 1);
   hideProperties();
-  
+
   UpdateLocalstorage();
   RefreshForm();
   renderUIJsonSchema();
@@ -211,6 +217,6 @@ function removeControl() {
   // Clear the properties section
   hideProperties();
   UpdateLocalstorage();
-  RefreshForm(); 
+  RefreshForm();
   renderJsonSchema();
 }
