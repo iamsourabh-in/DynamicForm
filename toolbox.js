@@ -17,12 +17,12 @@ const controls = [
     description: "Numeric Input",
     type: "control",
   },
-  {
-    key: "URL",
-    icon: "bi-link-45deg",
-    description: "URL Input",
-    type: "control",
-  },
+  // {
+  //   key: "URL",
+  //   icon: "bi-link-45deg",
+  //   description: "URL Input",
+  //   type: "control",
+  // },
   {
     key: "Email",
     icon: "bi-mailbox",

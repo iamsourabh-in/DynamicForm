@@ -143,10 +143,16 @@ function UpdateLocalstorage() {
   localStorage.setItem("schema", JSON.stringify(schema));
 }
 function ClearLocalstorage() {
-  localStorage.setItem("uischema", JSON.stringify(defaultUiSchema));
-  localStorage.setItem("schema", JSON.stringify([]));
-  restore();
-  location.reload();
+  if (confirm(' Alert! Are you sure you want to clear this form?')) {
+    localStorage.setItem("uischema", JSON.stringify(defaultUiSchema));
+    localStorage.setItem("schema", JSON.stringify([]));
+    restore();
+    location.reload();
+  } else {
+    // Do nothing!
+    console.log('Thing was not saved to the database.');
+  }
+
 }
 
 function init() {

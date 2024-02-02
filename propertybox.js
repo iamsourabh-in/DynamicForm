@@ -264,6 +264,8 @@ function removeControl() {
   const controlId = selectedControl.children[1].id;
   selectedControl.remove();
 
+  
+
   for (let i = 0; i < uiSchema.rows.length; i++) {
     for (let j = 0; j < uiSchema.rows[i].columns.length; j++) {
       const index = uiSchema.rows[i].columns[j].controls.findIndex(

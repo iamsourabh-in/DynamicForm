@@ -196,7 +196,7 @@ class FormBuilder {
     select.classList.add("form-control");
     select.id = field.id;
     select.value = field.value;
-    
+
     field.options.forEach((option) => {
       const opt = document.createElement("option");
       opt.value = option.value;
@@ -212,8 +212,6 @@ class FormBuilder {
       showControlProperties(field.id);
       event.stopPropagation();
     });
-
-
 
     wrapper.appendChild(label);
     wrapper.appendChild(select);
@@ -571,6 +569,7 @@ class FormBuilder {
   CreateHeading(field) {
     const wrapper = document.createElement("div");
     const heading = document.createElement(field.type);
+    heading.id = field.id;
     heading.className = field.class;
     heading.innerHTML = field.value;
     heading.addEventListener("click", (event) => {
