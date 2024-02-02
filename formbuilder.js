@@ -65,9 +65,9 @@ class FormBuilder {
       case "Email":
         return this.createEmail(field);
 
-      case "H1":
-      case "H2":
-      case "H3":
+      case "h1":
+      case "h2":
+      case "h3":
         return this.CreateHeading(field);
 
       case "Iframe":
@@ -154,8 +154,10 @@ class FormBuilder {
     wrapper.classList.add("form-group", "show-hover");
     const label = document.createElement("label");
     const input = document.createElement("input");
-
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
+    
     label.textContent = field.label;
     input.id = field.id;
     input.type = "text";
@@ -370,9 +372,10 @@ class FormBuilder {
 
     label.innerHTML = field.label;
 
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.name = field.name;
@@ -387,9 +390,10 @@ class FormBuilder {
 
     button.innerHTML = field.label;
     button.className = field.class;
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.name = field.name;
@@ -404,9 +408,10 @@ class FormBuilder {
 
     button.innerHTML = field.label;
     button.className = field.class;
-    wrapper.addEventListener("click", () => {
+    wrapper.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.name = field.name;
@@ -489,8 +494,8 @@ class FormBuilder {
 
         column.controls.forEach((control) => {
           // Customize control rendering based on type and controlId
-          let controlElement = this.createField(control);
-
+          const element = this.schema.find((item) => control.id == item.id);
+          let controlElement = this.createField(element);
           colDiv.appendChild(controlElement);
         });
 
@@ -535,7 +540,8 @@ class FormBuilder {
 
         column.controls.forEach((control) => {
           // Customize control rendering based on type and controlId
-          let controlElement = this.createField(control);
+          const element = this.schema.find((item) => control.id == item.id);
+          let controlElement = this.createField(element);
 
           colDiv.appendChild(controlElement);
         });
@@ -555,15 +561,17 @@ class FormBuilder {
     const wrapper = document.createElement("div");
     const heading = document.createElement(field.type);
     heading.className = field.class;
-    wrapper.addEventListener("click", () => {
+    heading.innerHTML = field.value;
+    heading.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
+      event.stopPropagation();
     });
 
     wrapper.name = field.name;
     wrapper.appendChild(heading);
 
-    return button;
+    return heading;
   }
   // Other field creation methods
 

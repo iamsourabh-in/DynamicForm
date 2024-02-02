@@ -7,22 +7,23 @@ function showLayoutProperties(row) {
   propertiesHeader.innerText = `Properties for Row`;
   properties.appendChild(propertiesHeader);
 
-  const classInput = createPropertyInput(
+  const classInput = createLayoutPropertyInput(
     "class",
     "text",
     "class",
-    row.classList ? row.classList || "" : ""
+    row.classList ? row.classList || "" : "",
+    index
   );
 
   properties.appendChild(classInput);
 
-  const updateButton = document.createElement("button");
-  updateButton.classList.add("btn", "btn-primary", "mt-5");
-  updateButton.innerText = "Update";
-  updateButton.addEventListener("click", function () {
-    updateLayoutProperties(index);
-  });
-  properties.appendChild(updateButton);
+  // const updateButton = document.createElement("button");
+  // updateButton.classList.add("btn", "btn-primary", "mt-5");
+  // updateButton.innerText = "Update";
+  // updateButton.addEventListener("click", function () {
+  //   updateLayoutProperties(index);
+  // });
+  // properties.appendChild(updateButton);
 
   const removeButton = document.createElement("button");
   removeButton.classList.add("btn", "btn-danger", "mt-5");
@@ -48,6 +49,13 @@ function showControlProperties(controlId) {
     "name",
     selectedControl ? schema[index].name || "" : ""
   );
+  const labelInput = createPropertyInput(
+    "label",
+    "text",
+    "label",
+    selectedControl ? schema[index].label || "" : ""
+  );
+
   const idInput = createPropertyInput(
     "id",
     "text",
@@ -58,14 +66,15 @@ function showControlProperties(controlId) {
     "class",
     "text",
     "class",
-    selectedControl ? schema[index].class || "" : ""
+    selectedControl ? schema[index].classList || "" : ""
   );
-  const requiredInput = createPropertyInput(
+  const valueInput = createPropertyInput(
     "value",
     "text",
     "value",
     selectedControl ? schema[index].value || false : ""
   );
+
   if (schema[index].type == "Dropdown") {
     const option = createPropertyInput(
       "value",
@@ -77,15 +86,16 @@ function showControlProperties(controlId) {
   }
 
   properties.appendChild(nameInput);
+  properties.appendChild(labelInput);
   properties.appendChild(idInput);
   properties.appendChild(classInput);
-  properties.appendChild(requiredInput);
+  properties.appendChild(valueInput);
 
-  const updateButton = document.createElement("button");
-  updateButton.classList.add("btn", "btn-primary", "mt-5");
-  updateButton.innerText = "Update";
-  updateButton.addEventListener("click", updateControlProperties);
-  properties.appendChild(updateButton);
+  // const updateButton = document.createElement("button");
+  // updateButton.classList.add("btn", "btn-primary", "mt-5");
+  // updateButton.innerText = "Update";
+  // updateButton.addEventListener("click", updateControlProperties);
+  // properties.appendChild(updateButton);
 
   const removeButton = document.createElement("button");
   removeButton.classList.add("btn", "btn-danger", "mt-5");
@@ -133,7 +143,32 @@ function createPropertyInput(labelText, inputType, id, value) {
   input.id = id;
   input.classList.add("form-control", "props");
   input.value = value || "";
+  //idInput.disabled = "disabled";
+  input.onchange = function () {
+    updateControlProperties();
+  };
+  formGroup.appendChild(label);
+  formGroup.appendChild(input);
 
+  return formGroup;
+}
+
+function createLayoutPropertyInput(labelText, inputType, id, value, index) {
+  const formGroup = document.createElement("div");
+  formGroup.classList.add("form-group", "mt-5");
+
+  const label = document.createElement("label");
+  label.innerText = labelText;
+
+  const input = document.createElement("input");
+  input.type = inputType;
+  input.id = id;
+  input.classList.add("form-control", "props");
+  input.value = value || "";
+  //idInput.disabled = "disabled";
+  input.onchange = function () {
+    updateLayoutProperties(index);
+  };
   formGroup.appendChild(label);
   formGroup.appendChild(input);
 
@@ -145,6 +180,7 @@ function updateLayoutProperties(index) {
   cssClass.split(",").forEach((css) => {
     uiSchema.rows[index].classList.push(css);
   });
+  RenderPreview();
   hideProperties();
   renderUIJsonSchema();
   RefreshForm();
@@ -157,17 +193,22 @@ function updateControlProperties() {
   const id = document.getElementById("id").value;
   const value = document.getElementById("value").value;
   const cssClass = document.getElementById("class").value;
-
-  selectedControl.name = name;
-  selectedControl.id = id;
-  selectedControl.children[1].value = value;
-  selectedControl.children[1].classList.add(cssClass);
-  const index = schema.findIndex((obj) => obj.id === id);
+  const label = document.getElementById("label").value;
+  let classList = [];
+  // selectedControl.name = name;
+  // selectedControl.id = id;
+  // selectedControl.children[1].value = value;
+  // selectedControl.children[1].classList.add(cssClass);
+  // const index = schema.findIndex((obj) => obj.id === id);
+  cssClass.split(",").forEach((css) => {
+    classList.push(css);
+  });
   schema = updateSchemaInfo(schema, id, {
     name: name,
     id: id,
     value: value,
-    class: cssClass,
+    classList: classList,
+    label: label,
   });
   RenderPreview();
   hideProperties();

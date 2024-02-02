@@ -42,7 +42,11 @@ function DropInDesignerHandler(event) {
     let data = createSchemaForDrop(element);
     let row = event.target.attributes["data-index"].value.split(",")[0];
     let col = event.target.attributes["data-index"].value.split(",")[1];
-    uiSchema.rows[row].columns[col].controls.push(data);
+    //uiSchema.rows[row].columns[col].controls.push(data);
+
+    uiSchema.rows[row].columns[col].controls.push({
+      id: data.id,
+    });
     schema.push(data);
   }
 }

@@ -85,7 +85,3 @@ body {
 .highlight-dragover {
   background-color: #cfffed; /* Highlight color when a control is dragged over */
 }
-
-.dropzone {
-  background-color: white;
-}

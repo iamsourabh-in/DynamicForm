@@ -69,7 +69,7 @@ function createTextBoxSchema(element) {
     name: element,
     placeholder: element,
     required: true,
-    class: "form-control",
+    classList: ["form-control"],
     validation: [
       {
         type: "pattern",
@@ -102,7 +102,7 @@ function createSelectSchema(element) {
     lookup: true,
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"],
   };
 }
 
@@ -117,7 +117,7 @@ function createNumberSchema(element) {
     required: false,
     value: 1,
     accept: "",
-    class: "",
+    classList: ["form-control"],
     min: 0,
     max: 100000,
     step: 1,
@@ -136,7 +136,7 @@ function createRadioSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"],
   };
 }
 
@@ -152,7 +152,7 @@ function createEmailSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"],
   };
 }
 
@@ -168,7 +168,7 @@ function createCheckboxSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"],
   };
 }
 
@@ -184,7 +184,7 @@ function createButtonSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "btn btn-primary",
+    classList: ["form-control", "btn", "btn-primary"]
   };
 }
 function createResetButtonSchema(element) {
@@ -199,7 +199,7 @@ function createResetButtonSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "btn btn-danger",
+    classList: ["form-control", "btn", "btn-danger"],
   };
 }
 
@@ -215,11 +215,11 @@ function createDatePickerSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"],
   };
 }
 
-function createHeading(element){
+function createHeading(element) {
   return {
     type: element.toLowerCase(),
     id: Date.now().toString(),
@@ -227,11 +227,11 @@ function createHeading(element){
     label: element,
     placeholder: element,
     required: false,
-    value: "",
+    value: "Heading",
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"]
   };
 }
 
@@ -247,7 +247,7 @@ function createSliderSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"]
   };
 }
 
@@ -263,7 +263,7 @@ function createFileUploadSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"]
   };
 }
 
@@ -280,7 +280,7 @@ function createIframeSchema(element) {
     options: [],
     multiple: false,
     accept: "",
-    class: "",
+    classList: ["form-control"]
   };
 }
 
@@ -291,7 +291,7 @@ function createLabelSchema(element) {
     name: element,
     label: element,
     accept: "",
-    class: "",
+    classList: ["form-control"]
   };
 }
 
