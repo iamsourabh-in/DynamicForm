@@ -231,7 +231,7 @@ function createHeading(element) {
     options: [],
     multiple: false,
     accept: "",
-    classList: ["form-control"]
+    classList: ["m-1"]
   };
 }
 

@@ -78,8 +78,8 @@ const controls = [
   },
   {
     key: "1Column",
-    icon: "bi-menu-button-wide",
-    description: "One Row",
+    icon: "bi-dice-1",
+    description: "1 Column",
     type: "layout",
   },
   {
@@ -122,7 +122,7 @@ const controls = [
   {
     key: "Iframe",
     icon: "bi-bounding-box",
-    description: "Dynamic Form",
+    description: "Custom Component 002 - App 1",
     type: "control",
   },
 ];
@@ -132,9 +132,10 @@ function renderToolbox() {
   const layoutTab = document.getElementById("layout");
   const formTab = document.getElementById("form");
 
-  controlsTab.innerHTML = "<h3>Controls</h3>";
-  layoutTab.innerHTML = "<h3>Layout</h3>";
-  formTab.innerHTML = "<h3>Form</h3>";
+  controlsTab.innerHTML =
+    "<h3 class='mt-1 p-2 text-light bg-dark'>Controls</h3>";
+  layoutTab.innerHTML = "<h3 class='mt-1 p-2 text-light bg-dark'>Layout</h3>";
+  formTab.innerHTML = "<h3 class='mt-1 p-2 text-light bg-dark'>Form</h3>";
 
   controls.forEach((control) => {
     const controlElement = createToolboxItem(control);

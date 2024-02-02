@@ -225,7 +225,9 @@ class FormBuilder {
     const input = document.createElement("input");
 
     input.id = field.id;
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
     label.innerHTML = field.label;
     input.type = "number";
     input.name = field.name;
@@ -251,7 +253,9 @@ class FormBuilder {
     const input = document.createElement("input");
 
     input.id = field.id;
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
     label.innerHTML = field.label;
     input.type = "checkbox";
     input.name = field.name;
@@ -277,7 +281,9 @@ class FormBuilder {
     const input = document.createElement("input");
 
     input.id = field.id;
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
     label.innerHTML = field.label;
     input.type = "date";
     input.name = field.name;
@@ -303,7 +309,9 @@ class FormBuilder {
     const input = document.createElement("input");
 
     input.id = field.id;
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
     label.innerHTML = field.label;
     input.type = "file";
     input.name = field.name;
@@ -329,7 +337,9 @@ class FormBuilder {
     const input = document.createElement("input");
 
     input.id = field.id;
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
     label.innerHTML = field.label;
     input.type = "range";
     input.name = field.name;
@@ -355,7 +365,9 @@ class FormBuilder {
     const input = document.createElement("input");
 
     input.id = field.id;
-    input.classList.add("form-control");
+    field.classList.forEach(function (cssClass) {
+      input.classList.add(cssClass);
+    });
     label.innerHTML = field.label;
     input.type = "radio";
     input.name = field.name;
@@ -499,7 +511,7 @@ class FormBuilder {
           "dropzone",
           "show-hover"
         );
-        colDiv.style.border = "1px dashed #ccc";
+        colDiv.style.border = "2px dashed #ccc";
 
         column.controls.forEach((control) => {
           // Customize control rendering based on type and controlId
@@ -572,6 +584,9 @@ class FormBuilder {
     heading.id = field.id;
     heading.className = field.class;
     heading.innerHTML = field.value;
+    field.classList.forEach(function (cssClass) {
+      heading.classList.add(cssClass);
+    });
     heading.addEventListener("click", (event) => {
       selectedControl = wrapper;
       showControlProperties(field.id);
@@ -581,7 +596,7 @@ class FormBuilder {
     wrapper.name = field.name;
     wrapper.appendChild(heading);
 
-    return heading;
+    return wrapper;
   }
   // Other field creation methods
 
