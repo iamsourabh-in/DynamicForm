@@ -41,6 +41,8 @@ body {
 
 .properties {
   margin-top: 20px;
+  background-color: aliceblue;
+  border-left: 2px solid black;
 }
 
 .show-hover :hover {
@@ -63,7 +65,7 @@ body {
 }
 
 .widgets_div .icon_div span i {
-  font-size: 24px;
+  font-size: 20px;
 }
 
 .widgets_div .text_div {
@@ -74,12 +76,12 @@ body {
 
 .widgets_div .text_div span {
   color: #212423;
-  font-size: 20px;
+  font-size: 14px;
 }
 
 .widgets_div .text_div span + br + span {
   color: #747f85;
-  font-size: 12px;
+  font-size: 10px;
 }
 /*-----*/
 .highlight-dragover {

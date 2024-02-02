@@ -2,6 +2,13 @@ let selectedControl = null;
 // Schema
 var schema = [];
 
+var defaultUiSchema = {
+  method: "POST",
+  action: "http://localhost:8080/api/v1/form",
+  type: "layout",
+  rows: [],
+};
+
 var uiSchema = {
   method: "POST",
   action: "http://localhost:8080/api/v1/form",
@@ -122,17 +129,24 @@ function setupDesigner() {
 
 // Generate a function to set and get item from localstorage
 function restore() {
-  let uischema = localStorage.getItem("uischema");
+  let localSchema = localStorage.getItem("uischema");
   let controls = localStorage.getItem("schema");
-  if (uischema != null) {
-    uiSchema = JSON.parse(uischema);
+  if (localSchema != "null") {
+    uiSchema = JSON.parse(localSchema);
   }
   if (controls != null) schema = JSON.parse(controls);
+  UpdateLocalstorage();
 }
 
 function UpdateLocalstorage() {
   localStorage.setItem("uischema", JSON.stringify(uiSchema));
   localStorage.setItem("schema", JSON.stringify(schema));
+}
+function ClearLocalstorage() {
+  localStorage.setItem("uischema", JSON.stringify(defaultUiSchema));
+  localStorage.setItem("schema", JSON.stringify([]));
+  restore();
+  location.reload();
 }
 
 function init() {

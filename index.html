@@ -20,6 +20,9 @@
       <div class="row">
         <div class="col-md-3">
           <div class="toolbox">
+            <button class="btn btn-danger" onclick="ClearLocalstorage()">
+              Clear Form
+            </button>
             <ul class="nav nav-tabs nav-fill">
               <li class="nav-item">
                 <a
@@ -103,7 +106,6 @@
                 ondragleave="removeHighlight(event)"
                 ondragenter="highlightDropArea(event)"
                 oncontextmenu="return false;"
-
               >
                 <!-- Designer Section -->
               </div>
@@ -125,10 +127,6 @@
         <div id="properties" class="col-md-2 properties">
           <!-- Properties Section -->
         </div>
-      </div>
-
-      <div id="json-schema" class="json-schema">
-        <!-- JSON Schema Section -->
       </div>
     </div>
 

@@ -157,7 +157,7 @@ class FormBuilder {
     field.classList.forEach(function (cssClass) {
       input.classList.add(cssClass);
     });
-    
+
     label.textContent = field.label;
     input.id = field.id;
     input.type = "text";
@@ -177,7 +177,14 @@ class FormBuilder {
 
     return wrapper;
   }
-
+  setSelectedValue(select, value) {
+    for (var i = 0; i < select.options.length; i++) {
+      if (select.options[i].text == value) {
+        select.options[i].selected = true;
+        return;
+      }
+    }
+  }
   createSelect(field) {
     const wrapper = document.createElement("div");
 
@@ -189,6 +196,15 @@ class FormBuilder {
     select.classList.add("form-control");
     select.id = field.id;
     select.value = field.value;
+    
+    field.options.forEach((option) => {
+      const opt = document.createElement("option");
+      opt.value = option.value;
+      opt.textContent = option.label;
+      select.appendChild(opt);
+    });
+
+    this.setSelectedValue(select, field.value);
 
     wrapper.name = field.name;
     wrapper.addEventListener("click", (event) => {
@@ -197,12 +213,7 @@ class FormBuilder {
       event.stopPropagation();
     });
 
-    field.options.forEach((option) => {
-      const opt = document.createElement("option");
-      opt.value = option.value;
-      opt.textContent = option.label;
-      select.appendChild(opt);
-    });
+
 
     wrapper.appendChild(label);
     wrapper.appendChild(select);
@@ -486,7 +497,7 @@ class FormBuilder {
         );
         colDiv.classList.add(
           "col-md-" + column.width,
-          "p-5",
+          "p-3",
           "dropzone",
           "show-hover"
         );

@@ -47,40 +47,46 @@ function showControlProperties(controlId) {
     "name",
     "text",
     "name",
-    selectedControl ? schema[index].name || "" : ""
+    schema ? schema[index].name || "" : ""
   );
   const labelInput = createPropertyInput(
     "label",
     "text",
     "label",
-    selectedControl ? schema[index].label || "" : ""
+    schema ? schema[index].label || "" : ""
   );
 
   const idInput = createPropertyInput(
     "id",
     "text",
     "id",
-    selectedControl ? schema[index].id || "" : ""
+    schema ? schema[index].id || "" : ""
   );
   const classInput = createPropertyInput(
     "class",
     "text",
     "class",
-    selectedControl ? schema[index].classList || "" : ""
+    schema ? schema[index].classList || "" : ""
   );
   const valueInput = createPropertyInput(
     "value",
     "text",
     "value",
-    selectedControl ? schema[index].value || false : ""
+    schema ? schema[index].value || false : ""
+  );
+  const hiddenInput = createPropertyInput(
+    "type",
+    "hidden",
+    "type",
+    schema ? schema[index].type || "" : ""
   );
 
   if (schema[index].type == "Dropdown") {
     const option = createPropertyInput(
-      "value",
+      "options",
       "text",
-      "value",
-      selectedControl ? schema[index].options[0].value || false : ""
+      "options",
+      schema ? JSON.stringify(schema[index].options) || false : ""
     );
     properties.appendChild(option);
   }
@@ -90,7 +96,7 @@ function showControlProperties(controlId) {
   properties.appendChild(idInput);
   properties.appendChild(classInput);
   properties.appendChild(valueInput);
-
+  properties.appendChild(hiddenInput);
   // const updateButton = document.createElement("button");
   // updateButton.classList.add("btn", "btn-primary", "mt-5");
   // updateButton.innerText = "Update";
@@ -181,7 +187,7 @@ function updateLayoutProperties(index) {
     uiSchema.rows[index].classList.push(css);
   });
   RenderPreview();
-  hideProperties();
+  //hideProperties();
   renderUIJsonSchema();
   RefreshForm();
   UpdateLocalstorage();
@@ -194,7 +200,13 @@ function updateControlProperties() {
   const value = document.getElementById("value").value;
   const cssClass = document.getElementById("class").value;
   const label = document.getElementById("label").value;
+  const type = document.getElementById("type").value;
   let classList = [];
+  let optionsJson = [];
+  if (type == "Dropdown") {
+    const optionsString = document.getElementById("options").value;
+    optionsJson = JSON.parse(optionsString);
+  }
   // selectedControl.name = name;
   // selectedControl.id = id;
   // selectedControl.children[1].value = value;
@@ -209,9 +221,10 @@ function updateControlProperties() {
     value: value,
     classList: classList,
     label: label,
+    options: optionsJson,
   });
   RenderPreview();
-  hideProperties();
+  //hideProperties();
   renderJsonSchema();
   UpdateLocalstorage();
   RefreshForm();
