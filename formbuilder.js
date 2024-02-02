@@ -25,14 +25,14 @@ class FormBuilder {
       this.container.appendChild(this.form);
       if (this.uiSchema.rows != null && this.uiSchema.rows.length > 0) {
         this.form.appendChild(this.renderLayout(this.uiSchema));
-      } 
+      }
       // else if (schema != null && schema.length > 0) {
       //   this.schema.forEach((field) => {
       //     const element = this.createField(field);
       //     this.form.appendChild(element);
       //   });
       // }
-       else {
+      else {
         this.container.style;
         this.container.innerHTML =
           "<h1> Drag Elements from the Toolbar here...</h1>";
@@ -64,6 +64,14 @@ class FormBuilder {
         return this.createResetButton(field);
       case "Email":
         return this.createEmail(field);
+
+      case "H1":
+      case "H2":
+      case "H3":
+        return this.CreateHeading(field);
+
+      case "Iframe":
+        return this.createIframe(field);
       case "Checkbox":
         return this.createCheckbox(field);
       case "2Column":
@@ -112,6 +120,31 @@ class FormBuilder {
 
     wrapper.appendChild(label);
     wrapper.appendChild(input);
+
+    return wrapper;
+  }
+
+  createIframe(field) {
+    const wrapper = document.createElement("div");
+    wrapper.classList.add("form-group", "show-hover");
+    const label = document.createElement("label");
+    const frame = document.createElement("iframe");
+
+    frame.classList.add("w-100");
+    label.textContent = field.label;
+    frame.id = field.id;
+    frame.name = field.name;
+    frame.src = field.src;
+
+    wrapper.name = field.name;
+    wrapper.addEventListener("click", (event) => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+      event.stopPropagation();
+    });
+
+    wrapper.appendChild(label);
+    wrapper.appendChild(frame);
 
     return wrapper;
   }
@@ -481,9 +514,9 @@ class FormBuilder {
     uiSchema.rows.forEach((row) => {
       let rowDiv = document.createElement("div");
       rowDiv.classList.add("row");
-      //row.classList.forEach(function (cssClass) {
-      //  rowDiv.classList.add(cssClass);
-      //});
+      row.classList.forEach(function (cssClass) {
+        rowDiv.classList.add(cssClass);
+      });
       rowDiv.id = row.id;
       // rowDiv.addEventListener("click", (event) => {
       //   selectedControl = container;
@@ -498,7 +531,7 @@ class FormBuilder {
           "data-index",
           rowCount.toString() + "," + colCount.toString()
         );
-        colDiv.classList.add("col-md-" + column.width, "p-5");
+        colDiv.classList.add("col-md-" + column.width);
 
         column.controls.forEach((control) => {
           // Customize control rendering based on type and controlId
@@ -516,6 +549,21 @@ class FormBuilder {
     });
 
     return container;
+  }
+
+  CreateHeading(field) {
+    const wrapper = document.createElement("div");
+    const heading = document.createElement(field.type);
+    heading.className = field.class;
+    wrapper.addEventListener("click", () => {
+      selectedControl = wrapper;
+      showControlProperties(field.id);
+    });
+
+    wrapper.name = field.name;
+    wrapper.appendChild(heading);
+
+    return button;
   }
   // Other field creation methods
 

@@ -24,7 +24,14 @@ function createSchemaForDrop(element) {
       return createEmailSchema(element);
     case "Reset":
       return createResetButtonSchema(element);
-
+    case "Iframe":
+      return createIframeSchema(element);
+    case "H1":
+      return createHeading(element);
+    case "H2":
+      return createHeading(element);
+    case "H3":
+      return createHeading(element);
     // etc for other field types
   }
 }
@@ -212,6 +219,22 @@ function createDatePickerSchema(element) {
   };
 }
 
+function createHeading(element){
+  return {
+    type: element.toLowerCase(),
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
 function createSliderSchema(element) {
   return {
     type: element,
@@ -236,6 +259,23 @@ function createFileUploadSchema(element) {
     label: element,
     placeholder: element,
     required: false,
+    value: "",
+    options: [],
+    multiple: false,
+    accept: "",
+    class: "",
+  };
+}
+
+function createIframeSchema(element) {
+  return {
+    type: element,
+    id: Date.now().toString(),
+    name: element,
+    label: element,
+    placeholder: element,
+    required: false,
+    src: "vue-app.html",
     value: "",
     options: [],
     multiple: false,
