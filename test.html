@@ -1,0 +1,117 @@
+const inputJson = {
+    "testName": "Example Test",
+    "dependsOn": ["Dependency 1", "Dependency 2"],
+    "parameters": [
+        { "name": "param1", "type": "text" },
+        { "name": "param2", "type": "number" }
+    ],
+    "notifications": {
+        "success": "Test completed successfully",
+        "error": "Test failed"
+    }
+};
+
+document.addEventListener('DOMContentLoaded', () => {
+    const formContainer = document.getElementById('form-container');
+    const generateBtn = document.getElementById('generate-btn');
+    const output = document.getElementById('output');
+
+    // Create form elements based on inputJson
+    function createForm(json) {
+        const formElements = [];
+
+        json.parameters.forEach(param => {
+            const formGroup = document.createElement('div');
+            formGroup.classList.add('form-group');
+
+            const label = document.createElement('label');
+            label.innerText = param.name;
+            formGroup.appendChild(label);
+
+            const input = document.createElement('input');
+            input.type = param.type;
+            input.name = param.name;
+            formGroup.appendChild(input);
+
+            formElements.push(formGroup);
+        });
+
+        formElements.forEach(element => formContainer.appendChild(element));
+    }
+
+    createForm(inputJson);
+
+    // Generate test case JSON on button click
+    generateBtn.addEventListener('click', () => {
+        const testCase = {
+            testName: inputJson.testName,
+            dependsOn: inputJson.dependsOn,
+            parameters: [],
+            notifications: inputJson.notifications
+        };
+
+        inputJson.parameters.forEach(param => {
+            const input = document.querySelector(`input[name="${param.name}"]`);
+            testCase.parameters.push({
+                name: param.name,
+                value: input.value
+            });
+        });
+
+        output.innerText = JSON.stringify(testCase, null, 2);
+    });
+});
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Case Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, .form-group select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        #generate-btn {
+            padding: 10px 15px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+        #output {
+            margin-top: 20px;
+            white-space: pre-wrap;
+            background-color: #f8f9fa;
+            padding: 10px;
+            border: 1px solid #dee2e6;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Test Case Generator</h1>
+
+<div id="form-container"></div>
+<button id="generate-btn">Generate Test Case</button>
+
+<h2>Generated JSON</h2>
+<pre id="output"></pre>
+
+<script src="app.js"></script>
+</body>
+</html>
