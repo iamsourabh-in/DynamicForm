@@ -1,6 +1,14 @@
+# Concept 
+
+- Pure JS
+- Jquery
+- HTML
+- CSS
+
 # Lookup Scehma
 
 ## DEMO 
+First Drag a layout and then a control under it.
 
 https://iamsourabh-in.github.io/DynamicForm/
 
